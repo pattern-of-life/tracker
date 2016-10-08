@@ -11,9 +11,17 @@ class TrackerProfileTestCase(TestCase):
         self.user.save()
 
     def test_user_exists(self):
-        """Prove the user exists."""
+        """Test the user exists."""
         self.assertTrue(self.user is not None)
 
     def test_username(self):
-        """Prove the username is correct."""
+        """Test the username is correct."""
         self.assertEqual(self.user.username, 'test', 'wrong username')
+
+    def test_profile_exists(self):
+        """Test that the user has a profile."""
+        self.assertTrue(self.user.profile is not None)
+
+    def test_profile_attached_to_right_user(self):
+        """Test profile is attached to right user."""
+        self.assertEqual(self.user.profile.user.username, 'test')

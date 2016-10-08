@@ -16,11 +16,10 @@ class TrackerProfile(models.Model):
         related_name="profile",
         on_delete=models.CASCADE
     )
-    first_name = models.CharField(max_length=50, blank=True)
-    last_name = models.CharField(max_length=50, blank=True)
     bio = models.CharField(max_length=2083, blank=True)
     access_level = models.CharField(max_length=15, blank=True)
-    location = models.CharField(max_length=2083, blank=True)
+    lat = models.FloatField(blank=True, null=True)
+    lng = models.FloatField(blank=True, null=True)
     street_address = models.CharField(max_length=2083, blank=True)
     website = models.CharField(max_length=2083, blank=True)
     social_media = models.CharField(max_length=2083, blank=True)
