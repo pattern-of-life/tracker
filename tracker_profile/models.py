@@ -11,7 +11,7 @@ from django.dispatch import receiver
 class TrackerProfile(models.Model):
     """A profile representing a tracker site patron."""
 
-    user = models.OnetoOneField(
+    user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         related_name="profile",
         on_delete=models.CASCADE
