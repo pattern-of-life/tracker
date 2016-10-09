@@ -31,6 +31,7 @@ class TrackerDevice(models.Model):
     def __str__(self):
         return self.title
 
+
 class DataPoint(models.Model):
     """Model for data points."""
     device = models.ForeignKey(
@@ -43,3 +44,16 @@ class DataPoint(models.Model):
     lng = models.FloatField()
     elevation = models.FloatField()
     time_received = models.DateTimeField(auto_now_add=True)
+
+
+class Route(models.Model):
+    """Model for route."""
+    name = models.CharField(max_length=50, blank=True)
+    description = models.CharField(max_length=200, blank=True)
+    start = models.DateTimeField()
+    end = models.DateTimeField(null=True)
+    device = models.ForeignKey(
+        TrackerDevice,
+        related_name='routes',
+        on_delete=models.deletion.CASCADE
+    )

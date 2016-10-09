@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from .models import TrackerDevice, DataPoint
+from .models import TrackerDevice, DataPoint, Route
 from django.utils import timezone
 
 
@@ -48,3 +48,28 @@ class DataPointTestCase(TestCase):
     def test_data_attached_to_right_device(self):
         """Test the data is attached to the right device."""
         self.assertEqual(self.device.data.first().device.user.username, 'test')
+
+
+class RouteTestCase(TestCase):
+    """Test case for route model."""
+
+    def setUp(self):
+        """Set up some data points and a route."""
+        self.user = User(username='test')
+        self.user.save()
+        self.device = TrackerDevice(user=self.user)
+        self.device.save()
+        Route(
+            name='a route',
+            start=timezone.now(),
+            device=self.device
+        ).save()
+
+    def test_route_exists(self):
+        """Check route exists."""
+        self.assertEqual(self.device.routes.count(), 1)
+
+    def test_route_attached_to_device(self):
+        """Check route exists."""
+        self.assertEqual(self.device.routes.first().name, 'a route')
+
