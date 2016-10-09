@@ -80,3 +80,33 @@ class RegistrationTestCase(TestCase):
         activation_url = re.findall(find_url, mail.outbox[0].body)[0]
         self.client.get(activation_url)
         self.assertTrue(User.objects.first().is_active)
+
+
+class LoginTestCase(TestCase):
+    """Test case for login and logout."""
+
+    def setUp(self):
+        """Create a user to log in with."""
+        self.username = 'foo'
+        self.password = 'somethingsomething'
+        self.user = User(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
+
+    def test_login_authenticates(self):
+        """Test POSTing to login."""
+        self.assertNotIn('_auth_user_id', self.client.session.keys())
+        response = self.client.post(reverse('auth_login'), dict(
+            username=self.username,
+            password=self.password
+        ))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('_auth_user_id', self.client.session.keys())
+
+    def test_logout(self):
+        """Test GETing logout"""
+        self.client.force_login(self.user)
+        self.assertIn('_auth_user_id', self.client.session.keys())
+        response = self.client.get(reverse('auth_logout'))
+        self.assertEqual(response.status_code, 302)
+        self.assertNotIn('_auth_user_id', self.client.session.keys())
