@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tracker_profile',
+    'tracker_device'
 ]
 
 MIDDLEWARE = [
