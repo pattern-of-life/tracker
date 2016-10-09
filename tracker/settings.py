@@ -150,3 +150,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Logout
 
 LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'

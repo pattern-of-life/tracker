@@ -36,13 +36,22 @@ class HomePageTestCase(TestCase):
         """Assert link to login on home page."""
         self.assertContains(self.response, reverse('registration_register'))
 
+    def test_sign_out_not_displayed(self):
+        """Assert link to login on home page."""
+        self.assertNotContains(self.response, reverse('auth_logout'))
+
     def test_authenticated_user_log_in_not_displayed(self):
         """Assert authenticated user can't see login link."""
         self.assertNotContains(self.auth_response, reverse('auth_login'))
 
     def test_authenticated_user_sign_up_not_displayed(self):
         """Assert authenticated user can't see sign up link."""
-        self.assertNotContains(self.auth_response, reverse('registration_register'))
+        url = reverse('registration_register')
+        self.assertNotContains(self.auth_response, url)
+
+    def test_authenticated_user_log_out_displayed(self):
+        """Assert authenticated user can see log out link."""
+        self.assertContains(self.auth_response, reverse('auth_logout'))
 
 
 class RegistrationTestCase(TestCase):
