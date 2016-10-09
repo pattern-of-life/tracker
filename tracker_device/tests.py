@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from .models import TrackerDevice
+from .models import TrackerDevice, DataPoint
+from django.utils import timezone
 
 
 class TrackerDeviceTest(TestCase):
@@ -19,3 +20,31 @@ class TrackerDeviceTest(TestCase):
     def test_device_attached_to_right_user(self):
         """Test the device is attached to the right user."""
         self.assertEqual(self.device.user.username, 'test')
+
+
+class DataPointTestCase(TestCase):
+    """Test case for data point model."""
+
+    def setUp(self):
+        """Set up device to associate data points with."""
+        self.user = User(username='test')
+        self.user.save()
+        self.device = TrackerDevice(user=self.user)
+        self.device.save()
+        self.data_count = 5
+        for i in range(self.data_count):
+            DataPoint(
+                device=self.device,
+                lat=i,
+                lng=i,
+                elevation=i,
+                time=timezone.now()
+            ).save()
+
+    def test_data_point(self):
+        """Test data points exist."""
+        self.assertEqual(self.device.data.count(), self.data_count)
+
+    def test_data_attached_to_right_device(self):
+        """Test the data is attached to the right device."""
+        self.assertEqual(self.device.data.first().device.user.username, 'test')

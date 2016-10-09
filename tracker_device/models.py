@@ -7,6 +7,7 @@ import uuid
 
 @python_2_unicode_compatible
 class TrackerDevice(models.Model):
+    """Model for tracker hardware."""
     user = models.ForeignKey(
         User,
         related_name="devices",
@@ -29,3 +30,16 @@ class TrackerDevice(models.Model):
 
     def __str__(self):
         return self.title
+
+class DataPoint(models.Model):
+    """Model for data points."""
+    device = models.ForeignKey(
+        TrackerDevice,
+        related_name='data',
+        on_delete=models.deletion.CASCADE
+    )
+    time = models.DateTimeField()
+    lat = models.FloatField()
+    lng = models.FloatField()
+    elevation = models.FloatField()
+    time_received = models.DateTimeField(auto_now_add=True)
