@@ -11,6 +11,10 @@ class HomePageTestCase(TestCase):
     def setUp(self):
         """Set up response for home page test case."""
         self.response = self.client.get(reverse("homepage"))
+        user = User(username="test")
+        user.save()
+        self.client.force_login(user)
+        self.auth_response = self.client.get(reverse("homepage"))
 
     def test_home_page_uses_right_template(self):
         """Assert home page view renders our view."""
@@ -23,6 +27,23 @@ class HomePageTestCase(TestCase):
     def test_home_page_welcome_message(self):
         """Assert welcome message shows on home page."""
         self.assertContains(self.response, "Welcome to TrackerPy")
+
+    def test_login_displayed(self):
+        """Assert link to login on home page."""
+        self.assertContains(self.response, reverse('auth_login'))
+
+    def test_sign_up_displayed(self):
+        """Assert link to login on home page."""
+        self.assertContains(self.response, reverse('registration_register'))
+
+    def test_authenticated_user_log_in_not_displayed(self):
+        """Assert authenticated user can't see login link."""
+        self.assertNotContains(self.auth_response, reverse('auth_login'))
+
+    def test_authenticated_user_sign_up_not_displayed(self):
+        """Assert authenticated user can't see sign up link."""
+        self.assertNotContains(self.auth_response, reverse('registration_register'))
+
 
 class RegistrationTestCase(TestCase):
     """Set up registration test case."""

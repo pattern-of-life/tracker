@@ -9,12 +9,15 @@
     <h2>Welcome to TrackerPy</h2>
   </div>
   <div>
-    <!-- <a href="url 'auth_login'">
-      <input type="button" value="Log In" class="btn btn-primary"/>
-    </a>
-    <a href="url 'registration_register'">
-      <input type="button" value="Sign Up" class="btn btn-primary">
-    </a> -->
+    {% if request.user.is_authenticated %}
+    {% else %}
+      <a href="{% url 'auth_login' %}">
+        <input type="button" value="Log In" class="btn btn-primary"/>
+      </a>
+      <a href="{% url 'registration_register' %}">
+        <input type="button" value="Sign Up" class="btn btn-primary">
+      </a>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
