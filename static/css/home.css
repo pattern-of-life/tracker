@@ -1,0 +1,9 @@
+body {
+  background: url("../images/world.jpg");
+  background-repeat:no-repeat;
+  background-size: 100%;
+}
+
+#home h2 {
+  color: #FFF;
+}
