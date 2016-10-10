@@ -5,6 +5,7 @@ from tracker_device.views import (
     DeleteDeviceView,
     CreateRouteView,
     EditRouteView,
+    DeleteRouteView,
 )
 
 urlpatterns = [
@@ -32,5 +33,10 @@ urlpatterns = [
         r'^route/(?P<pk>[0-9]+)/edit/$',
         EditRouteView.as_view(),
         name='edit_route'
+        ),
+    url(
+        r'^route/(?P<pk>[0-9]+)/delete/$',
+        DeleteRouteView.as_view(),
+        name='delete_route'
         ),
 ]

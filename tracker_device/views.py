@@ -121,3 +121,10 @@ class EditRouteView(UpdateView):
         return super(
                 EditRouteView, self).dispatch(
                     request, *args, **kwargs)
+
+
+class DeleteRouteView(DeleteView):
+    """View for deleting a route."""
+    model = Route
+    template_name = 'tracker_device/delete_route.html'
+    success_url = reverse_lazy('profile')

@@ -326,3 +326,36 @@ class EditRouteViewTestCase(TestCase):
         self.client.post(self.url, data)
         route = Route.objects.first()
         self.assertNotEqual(route.name, bad_name)
+
+
+class DeleteRouteViewTestCase(TestCase):
+    """Test case for view for deleting routes."""
+
+    def setUp(self):
+        """Set up a user, device, and route to be deleted."""
+        self.user = User(username='whoever')
+        self.user.save()
+        self.other_user = User(username='badguy')
+        self.other_user.save()
+        self.client.force_login(self.user)
+        self.device = TrackerDevice(user=self.user)
+        self.device.save()
+        self.route = Route(device=self.device, start=timezone.now())
+        self.route.save()
+        self.url = reverse('delete_route', args=[self.route.pk])
+
+    def test_delete_view_status_code(self):
+        """Test delete view status code."""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_view_post_redirects(self):
+        """Test delete view status code."""
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_delete_view_post_deletes_route(self):
+        """Test delete view status code."""
+        self.assertEqual(Route.objects.count(), 1)
+        self.client.post(self.url)
+        self.assertEqual(Route.objects.count(), 0)
