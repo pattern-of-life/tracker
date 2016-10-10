@@ -17,5 +17,11 @@
     {% endif %}
   </div>
 
+  <ul>
+    {% for device in object.user.devices.all %}
+      <li>{{ device.title }}</li>
+    {% endfor %}
+  </ul>
+
 </div>
 {% endblock %}

@@ -23,5 +23,5 @@ urlpatterns = [
         template_name='tracker/home.html'), name='homepage'),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
     url(r'^profile/', include('tracker_profile.urls')),
-    url(r'^profile/', include('tracker_device.urls')),
+    url(r'^device/', include('tracker_device.urls')),
 ]

@@ -22,7 +22,7 @@ class EditProfileView(UpdateView):
         'lng',
         'street_address',
         'website',
-        'social_media'
+        'social_media',
     ]
     template_name = "tracker_profile/edit_profile.html"
 
