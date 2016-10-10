@@ -191,3 +191,31 @@ class DeleteDeviceViewTestCase(TestCase):
         self.client.post(reverse('delete_device', args=[self.device.pk]))
         total_devices = TrackerDevice.objects.count()
         self.assertEqual(total_devices, 1)
+
+
+class CreateRouteViewTestCase(TestCase):
+    """Test case for creating routes."""
+
+    def setUp(self):
+        """create a user and device to set routes on."""
+        user = User(username='derek')
+        user.save()
+        self.user2 = User(username='fred')
+        self.user2.save()
+        self.client.force_login(user)
+        self.device = TrackerDevice(user=user, id_uuid=uuid4())
+        self.device.save()
+
+    def test_create_route_status_code(self):
+        """Test status code is 200 for new route creation."""
+        response = self.client.get(reverse('create_route'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_route_post_status_code(self):
+        """Test status code after post is 302."""
+        data = {
+            "start": "10/21/2016",
+            "device": self.device.pk
+            }
+        response = self.client.post(reverse('create_route'), data)
+        self.assertEqual(response.status_code, 302)

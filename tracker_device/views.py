@@ -1,5 +1,5 @@
 from django.urls import reverse, reverse_lazy
-from tracker_device.models import TrackerDevice
+from tracker_device.models import TrackerDevice, Route
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from uuid import uuid4
 from django.views.generic import (
@@ -70,3 +70,17 @@ class DeleteDeviceView(DeleteView):
                     request, *args, **kwargs)
         else:
             return HttpResponseForbidden()
+
+
+class CreateRouteView(CreateView):
+    """Create view for routes."""
+    model = Route
+    template_name = 'tracker_device/create_route.html'
+    success_url = reverse_lazy('profile')
+    fields = [
+        "name",
+        "description",
+        "start",
+        "end",
+        "device",
+    ]
