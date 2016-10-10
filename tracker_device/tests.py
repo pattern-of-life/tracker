@@ -104,7 +104,7 @@ class EditDeviceViewTestCase(TestCase):
 
     def setUp(self):
         """Set up a user and device to be edited."""
-        user = User(username="test")
+        user = User(username='carrie')
         user.save()
         self.client.force_login(user)
         self.device = TrackerDevice(user=user, id_uuid=uuid4())
@@ -125,3 +125,13 @@ class EditDeviceViewTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         device = TrackerDevice.objects.first()
         self.assertEqual(device.mode, mode)
+
+    def test_edit_view_by_other_user(self):
+        """Test posting to edit view returns error when not owner of device."""
+        new_user = User(username='lowell')
+        new_user.save()
+        self.client.force_login(new_user)
+        data = dict(title='bad', mode='debug')
+        self.client.post(reverse('edit_device', args=[self.device.pk]), data)
+        device = TrackerDevice.objects.first()
+        self.assertNotEqual(device.title, 'bad')
