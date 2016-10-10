@@ -1,7 +1,9 @@
+from uuid import uuid4
+from django.urls import reverse
 from django.test import TestCase
 from django.contrib.auth.models import User
-from .models import TrackerDevice, DataPoint, Route
 from django.utils import timezone
+from tracker_device.models import TrackerDevice, DataPoint, Route
 
 
 class TrackerDeviceTest(TestCase):
@@ -73,3 +75,63 @@ class RouteTestCase(TestCase):
         """Check route exists."""
         self.assertEqual(self.device.routes.first().name, 'a route')
 
+
+class CreateDeviceViewTestCase(TestCase):
+    """Test case for creating a new device."""
+
+    def setUp(self):
+        """Set up a user to make a device with."""
+        self.user = User(username="test")
+        self.user.save()
+        self.client.force_login(self.user)
+        self.response = self.client.get(reverse('create_device'))
+
+    def test_create_device_status_code(self):
+        """Check status code for device create view."""
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_creating_new_device(self):
+        """Check status code for device create view."""
+        self.assertEqual(TrackerDevice.objects.count(), 0)
+        data = dict(mode='quiet')
+        response = self.client.post(reverse('create_device'), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(TrackerDevice.objects.count(), 1)
+
+
+class EditDeviceViewTestCase(TestCase):
+    """Test case for editing existing devices."""
+
+    def setUp(self):
+        """Set up a user and device to be edited."""
+        user = User(username='carrie')
+        user.save()
+        self.client.force_login(user)
+        self.device = TrackerDevice(user=user, id_uuid=uuid4())
+        self.device.save()
+
+    def test_edit_view_status_code(self):
+        """Test status code of edit device page."""
+        pk = self.device.pk
+        response = self.client.get(reverse('edit_device', args=[pk]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_view_post(self):
+        """Test posting to edit view updates model."""
+        pk = self.device.pk
+        mode = 'debug'
+        data = dict(mode=mode)
+        response = self.client.post(reverse('edit_device', args=[pk]), data)
+        self.assertEqual(response.status_code, 302)
+        device = TrackerDevice.objects.first()
+        self.assertEqual(device.mode, mode)
+
+    def test_edit_view_by_other_user(self):
+        """Test posting to edit view returns error when not owner of device."""
+        new_user = User(username='lowell')
+        new_user.save()
+        self.client.force_login(new_user)
+        data = dict(title='bad', mode='debug')
+        self.client.post(reverse('edit_device', args=[self.device.pk]), data)
+        device = TrackerDevice.objects.first()
+        self.assertNotEqual(device.title, 'bad')

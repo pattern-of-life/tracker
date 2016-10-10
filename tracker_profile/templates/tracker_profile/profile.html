@@ -1,0 +1,27 @@
+{% extends "tracker/base.html" %}
+
+{% block body %}
+<div>
+  <h2>{{ object.user.username }}</h2>
+  {{ object.bio }}
+  {{ object.access_level }}
+  {{ object.street_address }}
+  {{ object.website }}
+  {{ object.social_media }}
+
+  <div>
+    {% if object.lat and object.lng %}
+      <h2>Location:</h2>
+      {{ object.lat }}
+      {{ object.lng }}
+    {% endif %}
+  </div>
+
+  <ul>
+    {% for device in object.user.devices.all %}
+      <li>{{ device.title }}</li>
+    {% endfor %}
+  </ul>
+
+</div>
+{% endblock %}
