@@ -128,3 +128,16 @@ class DeleteRouteView(DeleteView):
     model = Route
     template_name = 'tracker_device/delete_route.html'
     success_url = reverse_lazy('profile')
+
+    def dispatch(self, request, *args, **kwargs):
+        """Check if the route to delete is owned by user."""
+        pk = kwargs.get('pk')
+        try:
+            route_device = request.user.devices.filter(routes__pk=pk).first()
+            if not route_device:
+                return HttpResponseForbidden()
+        except AttributeError:
+            return HttpResponseRedirect(reverse('auth_login'))
+        return super(
+                DeleteRouteView, self).dispatch(
+                    request, *args, **kwargs)

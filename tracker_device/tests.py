@@ -359,3 +359,22 @@ class DeleteRouteViewTestCase(TestCase):
         self.assertEqual(Route.objects.count(), 1)
         self.client.post(self.url)
         self.assertEqual(Route.objects.count(), 0)
+
+    def test_delete_route_unauth_status_code(self):
+        """Test unauthenticated user redirects to login."""
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_delete_route_unauth_post_redirects(self):
+        """Test unauthenticated user posting to delete view redirects."""
+        self.client.logout()
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_delete_route_wrong_user_cannot_delete(self):
+        """Test unauthenticated user can't delete a route."""
+        self.client.force_login(self.other_user)
+        self.assertEqual(Route.objects.count(), 1)
+        self.client.post(self.url)
+        self.assertEqual(Route.objects.count(), 1)
