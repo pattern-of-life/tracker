@@ -97,3 +97,14 @@ class CreateRouteView(CreateView):
         return super(
                 CreateRouteView, self).dispatch(
                     request, *args, **kwargs)
+
+
+class EditRouteView(UpdateView):
+    """View for editing a route."""
+    model = Route
+    fields = [
+        'name',
+        'description',
+    ]
+    template_name = 'tracker_device/edit_route.html'
+    success_url = reverse_lazy('profile')

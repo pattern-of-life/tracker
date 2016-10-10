@@ -261,3 +261,35 @@ class CreateRouteViewTestCase(TestCase):
         self.client.post(reverse('create_route'), data)
         total_routes = Route.objects.count()
         self.assertEqual(total_routes, 0)
+
+
+class EditRouteViewTestCase(TestCase):
+    """Test editing a route."""
+
+    def setUp(self):
+        """Set up a user, a device, and route to edit."""
+        self.user = User(username='hello')
+        self.user.save()
+        self.client.force_login(self.user)
+        self.device = TrackerDevice(user=self.user)
+        self.device.save()
+        self.route = Route(device=self.device, start=timezone.now())
+        self.route.save()
+        self.url = reverse('edit_route', args=[self.route.pk])
+
+    def test_route_edit_view_status_code(self):
+        """Test status code of edit view"""
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_route_edit_view_post(self):
+        """Test status code of edit view"""
+        data = {'name': 'new name'}
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 302)
+
+    def test_route_edit_view_post_changes_route(self):
+        """Test status code of edit view"""
+        data = {'name': 'new name'}
+        self.client.post(self.url, data)
+        self.assertEqual(Route.objects.first().name, 'new name')
