@@ -1,7 +1,6 @@
 from django.urls import reverse, reverse_lazy
 from tracker_device.models import TrackerDevice, Route
 from django.http import HttpResponseForbidden, HttpResponseRedirect
-from uuid import uuid4
 from django.views.generic import (
     CreateView,
     UpdateView,
@@ -23,7 +22,6 @@ class CreateDeviceView(CreateView):
     def form_valid(self, form):
         """Attach user and new uuid to user."""
         form.instance.user = self.request.user
-        form.instance.uuid = uuid4()
         return super(CreateDeviceView, self).form_valid(form)
 
 

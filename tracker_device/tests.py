@@ -1,4 +1,3 @@
-from uuid import uuid4
 from django.urls import reverse
 from django.test import TestCase
 from django.contrib.auth.models import User
@@ -107,7 +106,7 @@ class EditDeviceViewTestCase(TestCase):
         user = User(username='carrie')
         user.save()
         self.client.force_login(user)
-        self.device = TrackerDevice(user=user, id_uuid=uuid4())
+        self.device = TrackerDevice(user=user)
         self.device.save()
 
     def test_edit_view_status_code(self):
@@ -147,7 +146,7 @@ class DeleteDeviceViewTestCase(TestCase):
         self.user2 = User(username='fred')
         self.user2.save()
         self.client.force_login(user)
-        self.device = TrackerDevice(user=user, id_uuid=uuid4())
+        self.device = TrackerDevice(user=user)
         self.device.save()
         self.url = reverse('delete_device', args=[self.device.pk])
 
@@ -204,7 +203,7 @@ class CreateRouteViewTestCase(TestCase):
         self.user2 = User(username='fred')
         self.user2.save()
         self.client.force_login(user)
-        self.device = TrackerDevice(user=user, id_uuid=uuid4())
+        self.device = TrackerDevice(user=user)
         self.device.save()
 
     def test_create_route_status_code(self):
