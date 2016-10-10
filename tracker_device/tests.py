@@ -135,3 +135,31 @@ class EditDeviceViewTestCase(TestCase):
         self.client.post(reverse('edit_device', args=[self.device.pk]), data)
         device = TrackerDevice.objects.first()
         self.assertNotEqual(device.title, 'bad')
+
+
+class DeleteDeviceViewTestCase(TestCase):
+    """Test case for deleting devices."""
+
+    def setUp(self):
+        """Set up a user and device to be deleted."""
+        user = User(username='derek')
+        user.save()
+        self.client.force_login(user)
+        self.device = TrackerDevice(user=user, id_uuid=uuid4())
+        self.device.save()
+
+    def test_delete_view_post_status_code(self):
+        """Test 302 status code when post to delete view."""
+        response = self.client.post(reverse('delete_device', args=[self.device.pk]))
+        self.assertEqual(response.status_code, 302)
+
+    def test_delete_view_get_status_code(self):
+        """Test 200 status code when get to delete view."""
+        response = self.client.get(reverse('delete_device', args=[self.device.pk]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_view_no_device_in_db(self):
+        """Test no device in database after delete."""
+        self.client.post(reverse('delete_device', args=[self.device.pk]))
+        total_devices = TrackerDevice.objects.count()
+        self.assertEqual(total_devices, 0)

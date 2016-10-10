@@ -1,8 +1,11 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
 from tracker_device.models import TrackerDevice
 from django.http import HttpResponseForbidden
 from uuid import uuid4
+from django.views.generic import (
+    CreateView,
+    UpdateView,
+    DeleteView)
 
 
 class CreateDeviceView(CreateView):
@@ -46,3 +49,10 @@ class EditDeviceView(UpdateView):
                     request, *args, **kwargs)
         else:
             return HttpResponseForbidden()
+
+
+class DeleteDeviceView(DeleteView):
+    """Delete view for devices."""
+    model = TrackerDevice
+    template_name = 'tracker_device/delete_device.html'
+    success_url = reverse_lazy('profile')
