@@ -71,6 +71,19 @@ class DeleteDeviceView(DeleteView):
             return HttpResponseForbidden()
 
 
+def verify_route_ownership(user, pk):
+    """Verify that the pk matches a route owned by the user.
+
+    Returns HTTPResponseForbidden if the user has routes, otherwise
+    redirects to login. If there are no issues, returns None."""
+    try:
+        route_device = user.devices.filter(routes__pk=pk).first()
+        if not route_device:
+            return HttpResponseForbidden()
+    except AttributeError:
+        return HttpResponseRedirect(reverse('auth_login'))
+
+
 class CreateRouteView(CreateView):
     """Create view for routes."""
     model = Route
@@ -85,17 +98,10 @@ class CreateRouteView(CreateView):
     ]
 
     def dispatch(self, request, *args, **kwargs):
-        """Check if the route to delete is owned by user."""
-        pk = kwargs.get('pk')
-        try:
-            route_device = request.user.devices.filter(routes__pk=pk).first()
-            if not route_device:
-                return HttpResponseForbidden()
-        except AttributeError:
-            return HttpResponseRedirect(reverse('auth_login'))
-        return super(
-                CreateRouteView, self).dispatch(
-                    request, *args, **kwargs)
+        """Check if the route to create is owned by user."""
+        auth_errors = verify_route_ownership(request.user, kwargs.get('pk'))
+        super_dispatch = super(CreateRouteView, self).dispatch
+        return auth_errors or super_dispatch(request, *args, **kwargs)
 
 
 class EditRouteView(UpdateView):
@@ -109,17 +115,10 @@ class EditRouteView(UpdateView):
     success_url = reverse_lazy('profile')
 
     def dispatch(self, request, *args, **kwargs):
-        """Check if the route to delete is owned by user."""
-        pk = kwargs.get('pk')
-        try:
-            route_device = request.user.devices.filter(routes__pk=pk).first()
-            if not route_device:
-                return HttpResponseForbidden()
-        except AttributeError:
-            return HttpResponseRedirect(reverse('auth_login'))
-        return super(
-                EditRouteView, self).dispatch(
-                    request, *args, **kwargs)
+        """Check if the route to edit is owned by user."""
+        auth_errors = verify_route_ownership(request.user, kwargs.get('pk'))
+        super_dispatch = super(EditRouteView, self).dispatch
+        return auth_errors or super_dispatch(request, *args, **kwargs)
 
 
 class DeleteRouteView(DeleteView):
@@ -130,16 +129,9 @@ class DeleteRouteView(DeleteView):
 
     def dispatch(self, request, *args, **kwargs):
         """Check if the route to delete is owned by user."""
-        pk = kwargs.get('pk')
-        try:
-            route_device = request.user.devices.filter(routes__pk=pk).first()
-            if not route_device:
-                return HttpResponseForbidden()
-        except AttributeError:
-            return HttpResponseRedirect(reverse('auth_login'))
-        return super(
-                DeleteRouteView, self).dispatch(
-                    request, *args, **kwargs)
+        auth_errors = verify_route_ownership(request.user, kwargs.get('pk'))
+        super_dispatch = super(DeleteRouteView, self).dispatch
+        return auth_errors or super_dispatch(request, *args, **kwargs)
 
 
 class CreateDataPointForm(forms.ModelForm):
