@@ -271,6 +271,8 @@ class EditRouteViewTestCase(TestCase):
         """Set up a user, a device, and route to edit."""
         self.user = User(username='hello')
         self.user.save()
+        self.other_user = User(username='badguy')
+        self.other_user.save()
         self.client.force_login(self.user)
         self.device = TrackerDevice(user=self.user)
         self.device.save()
@@ -279,18 +281,48 @@ class EditRouteViewTestCase(TestCase):
         self.url = reverse('edit_route', args=[self.route.pk])
 
     def test_route_edit_view_status_code(self):
-        """Test status code of edit view"""
+        """Test status code of edit view."""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
 
     def test_route_edit_view_post(self):
-        """Test status code of edit view"""
+        """Test status code of edit view."""
         data = {'name': 'new name'}
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 302)
 
     def test_route_edit_view_post_changes_route(self):
-        """Test status code of edit view"""
+        """Test posting to edit view changes route."""
         data = {'name': 'new name'}
         self.client.post(self.url, data)
         self.assertEqual(Route.objects.first().name, 'new name')
+
+    def test_route_edit_unauth_status_code(self):
+        """Test status code of editing route unauthenticated."""
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_route_edit_unauth_route_unchanged_in_db(self):
+        """Test editing route unauthenticated doesn't change route."""
+        self.client.logout()
+        bad_name = 'bad name'
+        data = {'name': bad_name}
+        self.client.post(self.url, data)
+        route = Route.objects.first()
+        self.assertNotEqual(route.name, bad_name)
+
+    def test_route_edit_wrong_user_status_code(self):
+        """Test editing other user's route redirects."""
+        self.client.force_login(self.other_user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_route_edit_wrong_user_route_unchanged_in_db(self):
+        """Test editing other user's route doesn't change route."""
+        self.client.force_login(self.other_user)
+        bad_name = 'bad name'
+        data = {'name': bad_name}
+        self.client.post(self.url, data)
+        route = Route.objects.first()
+        self.assertNotEqual(route.name, bad_name)
