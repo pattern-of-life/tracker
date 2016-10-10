@@ -163,3 +163,16 @@ class DeleteDeviceViewTestCase(TestCase):
         self.client.post(reverse('delete_device', args=[self.device.pk]))
         total_devices = TrackerDevice.objects.count()
         self.assertEqual(total_devices, 0)
+
+    def test_delete_view_unauth_user_redirects(self):
+        """Test unauthorized user redirected to login."""
+        self.client.logout()
+        response = self.client.post(reverse('delete_device', args=[self.device.pk]))
+        self.assertEqual(response.status_code, 302)
+
+    def test_delete_view_unauth_user_cannot_delete(self):
+        """Test unauthorized user cannot delete device."""
+        self.client.logout()
+        self.client.post(reverse('delete_device', args=[self.device.pk]))
+        total_devices = TrackerDevice.objects.count()
+        self.assertEqual(total_devices, 1)

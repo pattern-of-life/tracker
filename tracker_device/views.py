@@ -1,6 +1,7 @@
 from django.urls import reverse_lazy
 from tracker_device.models import TrackerDevice
 from django.http import HttpResponseForbidden
+from django.contrib.auth.mixins import LoginRequiredMixin
 from uuid import uuid4
 from django.views.generic import (
     CreateView,
@@ -51,8 +52,19 @@ class EditDeviceView(UpdateView):
             return HttpResponseForbidden()
 
 
-class DeleteDeviceView(DeleteView):
+class DeleteDeviceView(LoginRequiredMixin, DeleteView):
     """Delete view for devices."""
     model = TrackerDevice
     template_name = 'tracker_device/delete_device.html'
     success_url = reverse_lazy('profile')
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     """Check if the device to delete is owned by user."""
+    #     pk = kwargs.get('pk')
+    #     device = request.user.devices.filter(pk=pk).first()
+    #     if device:
+    #         return super(
+    #             DeleteDeviceView, self).dispatch(
+    #                 request, *args, **kwargs)
+    #     else:
+    #         return HttpResponseForbidden()
