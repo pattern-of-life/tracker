@@ -149,46 +149,47 @@ class DeleteDeviceViewTestCase(TestCase):
         self.client.force_login(user)
         self.device = TrackerDevice(user=user, id_uuid=uuid4())
         self.device.save()
+        self.url = reverse('delete_device', args=[self.device.pk])
 
     def test_delete_view_post_status_code(self):
         """Test 302 status code when post to delete view."""
-        response = self.client.post(reverse('delete_device', args=[self.device.pk]))
+        response = self.client.post(self.url)
         self.assertEqual(response.status_code, 302)
 
     def test_delete_view_get_status_code(self):
         """Test 200 status code when get to delete view."""
-        response = self.client.get(reverse('delete_device', args=[self.device.pk]))
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
 
     def test_delete_view_no_device_in_db(self):
         """Test no device in database after delete."""
-        self.client.post(reverse('delete_device', args=[self.device.pk]))
+        self.client.post(self.url)
         total_devices = TrackerDevice.objects.count()
         self.assertEqual(total_devices, 0)
 
     def test_delete_view_unauth_user_redirects(self):
         """Test unauthorized user redirected to login."""
         self.client.logout()
-        response = self.client.post(reverse('delete_device', args=[self.device.pk]))
+        response = self.client.post(self.url)
         self.assertEqual(response.status_code, 302)
 
     def test_delete_view_unauth_user_cannot_delete(self):
         """Test unauthorized user cannot delete device."""
         self.client.logout()
-        self.client.post(reverse('delete_device', args=[self.device.pk]))
+        self.client.post(self.url)
         total_devices = TrackerDevice.objects.count()
         self.assertEqual(total_devices, 1)
 
     def test_delete_view_wrong_auth_user_redirects(self):
         """Test unauthorized user redirected to login."""
         self.client.force_login(self.user2)
-        response = self.client.post(reverse('delete_device', args=[self.device.pk]))
+        response = self.client.post(self.url)
         self.assertEqual(response.status_code, 403)
 
     def test_delete_view_wrong_auth_user_cannot_delete(self):
         """Test unauthorized user cannot delete device."""
         self.client.force_login(self.user2)
-        self.client.post(reverse('delete_device', args=[self.device.pk]))
+        self.client.post(self.url)
         total_devices = TrackerDevice.objects.count()
         self.assertEqual(total_devices, 1)
 
