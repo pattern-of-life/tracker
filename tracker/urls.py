@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^$', HomeView.as_view(
         template_name='tracker/home.html'), name='homepage'),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
-    url(r'', include('tracker_profile.urls')),
+    url(r'^profile/', include('tracker_profile.urls')),
 ]
