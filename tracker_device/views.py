@@ -1,5 +1,6 @@
+from django import forms
 from django.urls import reverse, reverse_lazy
-from tracker_device.models import TrackerDevice, Route
+from tracker_device.models import TrackerDevice, Route, DataPoint
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.views.generic import (
     CreateView,
@@ -20,7 +21,7 @@ class CreateDeviceView(CreateView):
     success_url = reverse_lazy('profile')
 
     def form_valid(self, form):
-        """Attach user and new uuid to user."""
+        """Attach user to form."""
         form.instance.user = self.request.user
         return super(CreateDeviceView, self).form_valid(form)
 
@@ -139,3 +140,29 @@ class DeleteRouteView(DeleteView):
         return super(
                 DeleteRouteView, self).dispatch(
                     request, *args, **kwargs)
+
+
+class CreateDataPointForm(forms.ModelForm):
+    """Form for adding a data point.
+
+    Has a UUID field on it."""
+
+    class Meta(object):
+        model = DataPoint
+        exclude = ('device',)
+    uuid = forms.UUIDField()
+
+
+class CreateDataPointView(CreateView):
+    """View for deleting a route."""
+    model = Route
+    form_class = CreateDataPointForm
+    template_name = 'tracker_device/create_data_point.html'
+    success_url = reverse_lazy('profile')
+
+    def form_valid(self, form):
+        """Attach the right device to the form."""
+        uuid = form.data['uuid']
+        device = TrackerDevice.objects.filter(id_uuid=uuid).first()
+        form.instance.device = device
+        return super(CreateDataPointView, self).form_valid(form)

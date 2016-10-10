@@ -377,3 +377,33 @@ class DeleteRouteViewTestCase(TestCase):
         self.assertEqual(Route.objects.count(), 1)
         self.client.post(self.url)
         self.assertEqual(Route.objects.count(), 1)
+
+
+class CreateDataPointViewTestCase(TestCase):
+    """Test view for creating data points."""
+
+    def setUp(self):
+        """Set up a device to create data points onto."""
+        user = User(username='???')
+        user.save()
+        self.device = TrackerDevice(user=user)
+        self.device.save()
+
+    def test_data_point_status_code(self):
+        """Test data point view status code."""
+        response = self.client.get(reverse('create_data_point'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_data_point_post_creates_point(self):
+        """Test data point view status code."""
+        self.assertEqual(DataPoint.objects.count(), 0)
+        data = dict(
+            time='10/10/10',
+            lat=323.0,
+            lng=232.0,
+            elevation=15.3,
+            uuid=self.device.id_uuid
+        )
+        response = self.client.post(reverse('create_data_point'), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(DataPoint.objects.count(), 1)
