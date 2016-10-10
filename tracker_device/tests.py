@@ -88,3 +88,10 @@ class CreateDeviceViewTestCase(TestCase):
     def test_create_device_status_code(self):
         """Check status code for device create view."""
         self.assertEqual(self.response.status_code, 200)
+
+    def test_creating_new_device(self):
+        """Check status code for device create view."""
+        self.assertEqual(TrackerDevice.objects.count(), 0)
+        response = self.client.post(reverse('create_device'), dict(mode='quiet'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(TrackerDevice.objects.count(), 1)
