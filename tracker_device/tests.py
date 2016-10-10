@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.test import TestCase
 from django.contrib.auth.models import User
 from .models import TrackerDevice, DataPoint, Route
@@ -73,3 +74,17 @@ class RouteTestCase(TestCase):
         """Check route exists."""
         self.assertEqual(self.device.routes.first().name, 'a route')
 
+
+class CreateDeviceViewTestCase(TestCase):
+    """Test case for creating a new device."""
+
+    def setUp(self):
+        """Set up a user to make a device with."""
+        self.user = User(username="test")
+        self.user.save()
+        self.client.force_login(self.user)
+        self.response = self.client.get(reverse('create_device'))
+
+    def test_create_device_status_code(self):
+        """Check status code for device create view."""
+        self.assertEqual(self.response.status_code, 200)

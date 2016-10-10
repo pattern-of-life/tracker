@@ -59,6 +59,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'tracker', 'templates'),
             os.path.join(BASE_DIR, 'tracker_profile', 'templates'),
+            os.path.join(BASE_DIR, 'tracker_device', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
