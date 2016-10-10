@@ -144,6 +144,8 @@ class DeleteDeviceViewTestCase(TestCase):
         """Set up a user and device to be deleted."""
         user = User(username='derek')
         user.save()
+        self.user2 = User(username='fred')
+        self.user2.save()
         self.client.force_login(user)
         self.device = TrackerDevice(user=user, id_uuid=uuid4())
         self.device.save()
@@ -173,6 +175,19 @@ class DeleteDeviceViewTestCase(TestCase):
     def test_delete_view_unauth_user_cannot_delete(self):
         """Test unauthorized user cannot delete device."""
         self.client.logout()
+        self.client.post(reverse('delete_device', args=[self.device.pk]))
+        total_devices = TrackerDevice.objects.count()
+        self.assertEqual(total_devices, 1)
+
+    def test_delete_view_wrong_auth_user_redirects(self):
+        """Test unauthorized user redirected to login."""
+        self.client.force_login(self.user2)
+        response = self.client.post(reverse('delete_device', args=[self.device.pk]))
+        self.assertEqual(response.status_code, 403)
+
+    def test_delete_view_wrong_auth_user_cannot_delete(self):
+        """Test unauthorized user cannot delete device."""
+        self.client.force_login(self.user2)
         self.client.post(reverse('delete_device', args=[self.device.pk]))
         total_devices = TrackerDevice.objects.count()
         self.assertEqual(total_devices, 1)
