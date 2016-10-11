@@ -19,7 +19,7 @@
 
   <ul>
     {% for device in object.user.devices.all %}
-      <li>{{ device.title }} {{ device.pk }}</li>
+      <li><a href="{% url 'detail_device' device.pk %}">{{ device.title }} {{ device.pk }}</a></li>
     {% endfor %}
   </ul>
 
