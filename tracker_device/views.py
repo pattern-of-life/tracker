@@ -5,7 +5,8 @@ from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.views.generic import (
     CreateView,
     UpdateView,
-    DeleteView)
+    DeleteView,
+    DetailView,)
 
 
 class CreateDeviceView(CreateView):
@@ -71,9 +72,11 @@ class DeleteDeviceView(DeleteView):
             return HttpResponseForbidden()
 
 
-class DetailDeviceView(detailview):
+class DetailDeviceView(DetailView):
     """Show device details- routes and data points that belong to that
     device and display map"""
+    model = TrackerDevice
+    template_name = 'tracker_device/detail_device.html'
 
 
 def verify_route_ownership(user, pk):
