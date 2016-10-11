@@ -1,0 +1,52 @@
+{% extends "tracker/base.html" %}
+
+{% block head %}
+  {% load static %}
+  <link type="text/css" rel="stylesheet" href="{% static "css/home.css" %}" charset="utf-8">
+{% endblock %}
+{% block body %}
+  <div id="about">
+    <div>
+      <h2>About The Site</h2>
+    </div>
+    <div>
+      <p>
+        <a href="https://github.com/pattern-of-life/tracker">Django App</a>
+      </p>
+      <p>
+        <a href="https://github.com/pattern-of-life/tracker-hardware">Firmware</a>
+      </p>
+      <p>
+        <a href="https://github.com/pattern-of-life/trackerpy-ansible">Ansible Playbook</a>
+      </p>
+    </div>
+    <div>
+      <h2>About The Team</h2>
+    </div>
+    <div>
+      <section>
+        <a href="#">David Banks</a>
+        <p>
+          Hi, my name is David, I enjoy moonlighting on the town with my beautiful wife.  I also enjoy diddling with hardware, writing mean Python code and going to the shooting range.
+        </p>
+      </section>
+      <section>
+        <a href="#">Derek Hewitt</a>
+        <p>
+          Hi, I'm Derek, 6 foot 3 inches tall, single and looking.  Skilled in the art of survival, programing in Python, and quilting, hit me up on my github or linkedin.
+        </p>
+      </section>
+      <section>
+        <a href="#">Justin Lange</a>
+        <p>
+          Hi, I'm J-Dizzle or that's what all the other programming wizards call me.  I don't bother learning new languages, I write them myself. Code fellows needs to step up their game because I don't drink tap water.
+        </p>
+      </section>
+      <section>
+        <a href="#">Victor Benavente</a>
+        <p>
+          Hi, I'm Vic, when I'm not programming JavaScript by mistake in my Python class, I'm getting drunk and losing my bookbag in Downtown Seattle, then I have to go to Lake City and try and retrieve it.  Lame.
+        </p>
+      </section>
+    </div>
+  {% endblock %}

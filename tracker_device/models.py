@@ -51,7 +51,7 @@ class Route(models.Model):
     name = models.CharField(max_length=50, blank=True)
     description = models.CharField(max_length=200, blank=True)
     start = models.DateTimeField()
-    end = models.DateTimeField(null=True)
+    end = models.DateTimeField(blank=True, null=True)
     device = models.ForeignKey(
         TrackerDevice,
         related_name='routes',

@@ -119,3 +119,23 @@ class LoginTestCase(TestCase):
         response = self.client.get(reverse('auth_logout'))
         self.assertEqual(response.status_code, 302)
         self.assertNotIn('_auth_user_id', self.client.session.keys())
+
+
+class AboutTestCase(TestCase):
+    """Test case for about view."""
+
+    def setUp(self):
+        """Set up response to go to about page."""
+        self.response = self.client.get(reverse("aboutpage"))
+
+    def test_about_page_uses_right_template(self):
+        """Assert about page view renders our view."""
+        for template_name in [
+            'tracker/about.html',
+            'tracker/base.html'
+        ]:
+            self.assertTemplateUsed(self.response, template_name)
+
+    def test_about_page_message(self):
+        """Assert about titles show on about page."""
+        self.assertContains(self.response, "About The Team")
