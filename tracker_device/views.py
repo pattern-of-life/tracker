@@ -1,3 +1,4 @@
+import os
 from django import forms
 from django.urls import reverse, reverse_lazy
 from tracker_device.models import TrackerDevice, Route, DataPoint
@@ -82,6 +83,7 @@ class DetailDeviceView(DetailView):
         context = super(DetailDeviceView, self).get_context_data(**kwargs)
         pk = kwargs['object'].pk
         context['device'] = TrackerDevice.objects.filter(pk=pk).first()
+        context['googleapikey'] = os.environ.get('GOOGLE_MAPS_API_KEY')
         return context
 
 
