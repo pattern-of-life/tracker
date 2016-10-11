@@ -71,6 +71,11 @@ class DeleteDeviceView(DeleteView):
             return HttpResponseForbidden()
 
 
+class DetailDeviceView(detailview):
+    """Show device details- routes and data points that belong to that
+    device and display map"""
+
+
 def verify_route_ownership(user, pk):
     """Verify that the pk matches a route owned by the user.
 
