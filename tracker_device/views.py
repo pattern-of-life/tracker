@@ -78,6 +78,13 @@ class DetailDeviceView(DetailView):
     model = TrackerDevice
     template_name = 'tracker_device/detail_device.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(DetailDeviceView, self).get_context_data(**kwargs)
+        pk = kwargs['object'].pk
+        context['device'] = TrackerDevice.objects.filter(pk=pk).first()
+        # import pdb; pdb.set_trace()
+        return context
+
 
 def verify_route_ownership(user, pk):
     """Verify that the pk matches a route owned by the user.

@@ -1,6 +1,14 @@
 {% extends "tracker/base.html" %}
 
 {% block body %}
-    <h2>device detail view</h2>
-        {# some more html here #}
+    <h3>Device Detail View</h3>
+        {{ device.device_type }}
+        {{ device.title }}
+        {{ device.description }}
+        {{ device.mode }}
+        {{ device.date_created }}
+    <h3>Data Points</h3>
+        <p>These are your 10 most recent data points.  Click here for more.</p>
+    <h3>Map</h3>
+        <p>This is where the map will go shortly.</p>
 {% endblock %}

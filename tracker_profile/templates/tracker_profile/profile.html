@@ -19,7 +19,7 @@
 
   <ul>
     {% for device in object.user.devices.all %}
-      <li>{{ device.title }}</li>
+      <li>{{ device.title }} {{ device.pk }}</li>
     {% endfor %}
   </ul>
 
