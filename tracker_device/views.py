@@ -144,6 +144,14 @@ class CreateDataPointForm(forms.ModelForm):
         exclude = ('device',)
     uuid = forms.UUIDField()
 
+    def clean(self):
+        """Ensure UUID being submitted is attached to a device."""
+        cleaned_data = super(CreateDataPointForm, self).clean()
+        uuid = cleaned_data.get('uuid')
+        if TrackerDevice.objects.filter(id_uuid=uuid).count() == 0:
+            error = forms.ValidationError('Bad UUID')
+            self.add_error('uuid', error)
+
 
 class CreateDataPointView(CreateView):
     """View for deleting a route."""
@@ -153,7 +161,10 @@ class CreateDataPointView(CreateView):
     success_url = reverse_lazy('profile')
 
     def form_valid(self, form):
-        """Attach the right device to the form."""
+        """Attach the right device to the form.
+
+        `device` will never be None because this view's form verifies
+        that the UUID exists."""
         uuid = form.data['uuid']
         device = TrackerDevice.objects.filter(id_uuid=uuid).first()
         form.instance.device = device

@@ -1,3 +1,4 @@
+from uuid import uuid4
 from django.urls import reverse
 from django.test import TestCase
 from django.contrib.auth.models import User
@@ -407,3 +408,29 @@ class CreateDataPointViewTestCase(TestCase):
         response = self.client.post(reverse('create_data_point'), data)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(DataPoint.objects.count(), 1)
+
+    def test_data_point_post_invalid_uuid(self):
+        """Check posting to the create data point view with invalid UUID."""
+        data = dict(
+            time='10/10/10',
+            lat=323.0,
+            lng=232.0,
+            elevation=15.3,
+            uuid=';-)'
+        )
+        response = self.client.post(reverse('create_data_point'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(DataPoint.objects.count(), 0)
+
+    def test_data_point_post_incorrect_uuid(self):
+        """Check posting to the create data point view with incorrect UUID."""
+        data = dict(
+            time='10/10/10',
+            lat=323.0,
+            lng=232.0,
+            elevation=15.3,
+            uuid=uuid4()
+        )
+        response = self.client.post(reverse('create_data_point'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(DataPoint.objects.count(), 0)
