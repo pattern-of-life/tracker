@@ -82,7 +82,6 @@ class DetailDeviceView(DetailView):
         context = super(DetailDeviceView, self).get_context_data(**kwargs)
         pk = kwargs['object'].pk
         context['device'] = TrackerDevice.objects.filter(pk=pk).first()
-        # import pdb; pdb.set_trace()
         return context
 
 

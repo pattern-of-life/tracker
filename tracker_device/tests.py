@@ -434,3 +434,43 @@ class CreateDataPointViewTestCase(TestCase):
         response = self.client.post(reverse('create_data_point'), data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(DataPoint.objects.count(), 0)
+
+
+class TestDetailDeviceView(TestCase):
+    """Tests for detail device view."""
+
+    def setUp(self):
+        """Add a device with some data points to test."""
+        self.user = User(username='test user')
+        self.user.save()
+        self.device = TrackerDevice(user=self.user, title='test device')
+        self.device.save()
+        for i in range(30):
+            DataPoint(
+                time=timezone.now(),
+                lat=i,
+                lng=i+30,
+                elevation=i+60,
+                device=self.device
+            ).save()
+        url = reverse('detail_device', args=[self.device.pk])
+        self.response = self.client.get(url)
+
+    def test_title_on_page(self):
+        """Test title of device on page."""
+        self.assertContains(self.response, self.device.title)
+
+    def test_page_has_data_point_lats(self):
+        """Test response has latitudes."""
+        for datum in self.device.data.all():
+            self.assertContains(self.response, datum.lat)
+
+    def test_page_has_data_point_lngs(self):
+        """Test response has longitudes."""
+        for datum in self.device.data.all():
+            self.assertContains(self.response, datum.lng)
+
+    def test_page_has_data_point_elevation(self):
+        """Test response has elevations."""
+        for datum in self.device.data.all():
+            self.assertContains(self.response, datum.elevation)
