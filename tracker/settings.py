@@ -29,7 +29,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = os.environ.get('DEBUG', False)
+DEBUG = os.environ.get('DEBUG', False) != 'False'
 
 
 # Application definition
