@@ -21,14 +21,14 @@
 
   <div>
     <h3>Data Points</h3>
-    <p>These are your 10 most recent data points.  Click here for more.</p>
+    <p>These are your 10 most recent data points. Click here for more.</p>
     <ul>
-      {% for data in device.data.all %}
+      {% for datum in data %}
         <li>
-          {{ data.time }},
-          latitude {{ data.lat }},
-          longitude {{ data.lng }},
-          {{ data.elevation }} meters
+          {{ datum.time }},
+          latitude {{ datum.lat }},
+          longitude {{ datum.lng }},
+          {{ datum.elevation }} meters
         </li>
       {% endfor %}
     </ul>
@@ -41,7 +41,7 @@
       <script>
         function initMap() {
           var coords = [
-            {% for datum in device.data.all %}
+            {% for datum in data %}
             {
               lat: {{ datum.lat }},
               lng: {{ datum.lng }},

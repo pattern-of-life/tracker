@@ -82,8 +82,10 @@ class DetailDeviceView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailDeviceView, self).get_context_data(**kwargs)
         pk = kwargs['object'].pk
-        context['device'] = TrackerDevice.objects.filter(pk=pk).first()
+        device = TrackerDevice.objects.filter(pk=pk).first()
+        context['device'] = device
         context['googleapikey'] = os.environ.get('GOOGLE_MAPS_API_KEY')
+        context['data'] = device.data.order_by('-time')[:10]
         return context
 
 
