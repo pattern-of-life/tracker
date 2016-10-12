@@ -518,3 +518,65 @@ class TestDetailDeviceView(TestCase):
                 self.assertContains(self.response, datum.elevation)
             else:
                 self.assertNotContains(self.response, datum.lng)
+
+
+class TestDetailRouteView(TestCase):
+    """Tests for detail route view."""
+
+    TEST_DATA = map(timezone.make_aware, [
+        timezone.datetime(1974, 5, 17, 0, 0),
+        timezone.datetime(1369, 4, 27, 0, 0),
+        timezone.datetime(2512, 12, 8, 0, 0),
+        timezone.datetime(2170, 1, 18, 0, 0),
+        timezone.datetime(1821, 5, 28, 0, 0),
+        timezone.datetime(2519, 9, 15, 0, 0),
+        timezone.datetime(1721, 7, 19, 0, 0),
+        timezone.datetime(2328, 6, 18, 0, 0),
+        timezone.datetime(2937, 12, 7, 0, 0),
+        timezone.datetime(2555, 11, 10, 0, 0),
+        timezone.datetime(2967, 8, 15, 0, 0),
+        timezone.datetime(2278, 10, 20, 0, 0),
+        timezone.datetime(1158, 5, 23, 0, 0),
+        timezone.datetime(2286, 2, 25, 0, 0),
+        timezone.datetime(2529, 5, 5, 0, 0),
+        timezone.datetime(2307, 2, 3, 0, 0),
+        timezone.datetime(1118, 5, 5, 0, 0),
+        timezone.datetime(2891, 7, 9, 0, 0),
+        timezone.datetime(2579, 6, 8, 0, 0),
+        timezone.datetime(2060, 10, 9, 0, 0),
+        timezone.datetime(2665, 1, 24, 0, 0),
+        timezone.datetime(2096, 8, 15, 0, 0),
+        timezone.datetime(2846, 4, 12, 0, 0),
+        timezone.datetime(2841, 6, 11, 0, 0),
+        timezone.datetime(1429, 5, 27, 0, 0),
+        timezone.datetime(1873, 12, 21, 0, 0),
+        timezone.datetime(1476, 2, 12, 0, 0),
+        timezone.datetime(2061, 1, 1, 0, 0),
+        timezone.datetime(2698, 8, 15, 0, 0),
+        timezone.datetime(1382, 9, 26, 0, 0)
+    ])
+
+    def setUp(self):
+        """Add a route with some data points to test."""
+        self.user = User(username='test user')
+        self.user.save()
+        self.device = TrackerDevice(user=self.user, title='test device')
+        self.device.save()
+        for i, date in enumerate(self.TEST_DATA):
+            DataPoint(
+                time=date,
+                lat=i,
+                lng=i+30,
+                elevation=i+60,
+                device=self.device
+            ).save()
+        url = reverse('detail_device', args=[self.device.pk])
+        start = timezone.datetime(1001, 1, 1)
+        end = timezone.datetime(2200, 1, 1)
+        self.route = Route(device=self.device, start=start, end=end)
+        self.response = self.client.get(url)
+        # self.data = self.device.data.order_by('-time')
+
+    def test_title_on_route_page(self):
+        """Test title of device on route page."""
+        self.assertContains(self.response, self.device.title)

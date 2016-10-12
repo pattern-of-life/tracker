@@ -8,6 +8,7 @@ from tracker_device.views import (
     DeleteRouteView,
     CreateDataPointView,
     DetailDeviceView,
+    DetailRouteView,
 )
 
 urlpatterns = [
@@ -50,5 +51,10 @@ urlpatterns = [
         r'^(?P<pk>[0-9]+)/detail$',
         DetailDeviceView.as_view(),
         name='detail_device'
+    ),
+    url(
+        r'^route/(?P<pk>[0-9]+)$',
+        DetailRouteView.as_view(),
+        name='detail_route'
     ),
 ]

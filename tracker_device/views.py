@@ -154,6 +154,26 @@ class DeleteRouteView(DeleteView):
         return auth_errors or super_dispatch(request, *args, **kwargs)
 
 
+class DetailRouteView(DetailView):
+    """Show route details- data points that belong to that
+    route and display them on a map."""
+    model = TrackerDevice
+    template_name = 'tracker_device/detail_route.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailDeviceView, self).get_context_data(**kwargs)
+        pk = kwargs['object'].pk
+        route = Route.objects.filter(pk=pk).first()
+        context['route'] = route
+        device = TrackerDevice.objects.get(routes__contains=route).first()
+        context['device'] = device
+        context['googleapikey'] = os.environ.get('GOOGLE_MAPS_API_KEY')
+        context['data'] = DataPoint.objects.filter(
+            time__range=(route.start, route.end)).filter(
+            device=device).order_by('-time')[:10]
+        return context
+
+
 class CreateDataPointForm(forms.ModelForm):
     """Form for adding a data point.
 
