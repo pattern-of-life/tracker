@@ -1,3 +1,4 @@
+import os
 from django import forms
 from django.urls import reverse, reverse_lazy
 from tracker_device.models import TrackerDevice, Route, DataPoint
@@ -5,7 +6,8 @@ from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.views.generic import (
     CreateView,
     UpdateView,
-    DeleteView)
+    DeleteView,
+    DetailView,)
 
 
 class CreateDeviceView(CreateView):
@@ -69,6 +71,22 @@ class DeleteDeviceView(DeleteView):
                     request, *args, **kwargs)
         else:
             return HttpResponseForbidden()
+
+
+class DetailDeviceView(DetailView):
+    """Show device details- routes and data points that belong to that
+    device and display map"""
+    model = TrackerDevice
+    template_name = 'tracker_device/detail_device.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailDeviceView, self).get_context_data(**kwargs)
+        pk = kwargs['object'].pk
+        device = TrackerDevice.objects.filter(pk=pk).first()
+        context['device'] = device
+        context['googleapikey'] = os.environ.get('GOOGLE_MAPS_API_KEY')
+        context['data'] = device.data.order_by('-time')[:10]
+        return context
 
 
 def verify_route_ownership(user, pk):
