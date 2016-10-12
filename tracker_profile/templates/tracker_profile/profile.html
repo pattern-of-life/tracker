@@ -23,5 +23,11 @@
     {% endfor %}
   </ul>
 
+  <ul>
+    {% for route in object.user.routes.all %}
+      <li><a href="{% url 'detail_route route.pk' %}">{{ route.title }} {{ route.pk }}</a></li>
+    {% endfor %}
+  </ul>
+
 </div>
 {% endblock %}

@@ -5,10 +5,10 @@
 {% endblock %}
 {% block body %}
 <div id="home">
-  <div>
+  <header>
     <h2>Welcome to TrackerPy</h2>
-  </div>
-  <div>
+  </header>
+  <div class="buttons">
     {% if request.user.is_authenticated %}
       <a href="{% url 'auth_logout' %}">
         <input type="button" value="Log Out" class="btn btn-primary"/>
