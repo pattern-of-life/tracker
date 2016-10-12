@@ -1,5 +1,7 @@
 import os
 from django import forms
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from django.urls import reverse, reverse_lazy
 from tracker_device.models import TrackerDevice, Route, DataPoint
 from django.http import HttpResponseForbidden, HttpResponseRedirect
@@ -171,6 +173,7 @@ class CreateDataPointForm(forms.ModelForm):
             self.add_error('uuid', error)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CreateDataPointView(CreateView):
     """View for deleting a route."""
     model = Route
