@@ -35,10 +35,9 @@ See Github Issues for additional Stretch Goal information.  Issues marked 'S#' a
 ## API Documentation
 * Our trackers hit an external API endpoint that allows them to update us of their status in a RESTful manner.
 
-PATH: /device/data/create
-POST with fields:
-time: mm/dd/yyyy hh:mm:ss
-lat: float
-lon: float
-elevation: float
-uuid: UUID
+POST /device/data/create
+- time: mm/dd/yyyy hh:mm:ss
+- lat: float
+- lon: float
+- elevation: float
+- uuid: UUID
