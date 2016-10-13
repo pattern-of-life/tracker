@@ -491,6 +491,7 @@ class TestDetailDeviceView(TestCase):
         self.user.save()
         self.device = TrackerDevice(user=self.user, title='test device')
         self.device.save()
+        self.client.force_login(self.user)
         for i, date in enumerate(self.TEST_DATA):
             DataPoint(
                 time=date,
@@ -531,3 +532,10 @@ class TestDetailDeviceView(TestCase):
                 self.assertContains(self.response, datum.elevation)
             else:
                 self.assertNotContains(self.response, datum.lng)
+
+    def test_get_page_unauthenticated(self):
+        """Test redirects when unauthenticated"""
+        self.client.logout()
+        url = reverse('detail_device', args=[self.device.pk])
+        response = self.client.get(url)
+        self.assertRedirects(response, reverse('auth_login'))

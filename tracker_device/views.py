@@ -91,6 +91,15 @@ class DetailDeviceView(DetailView):
         context['data'] = device.data.order_by('-time')[:10]
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        """Check if the device to view is owned by user."""
+        pk = kwargs.get('pk')
+        try:
+            request.user.devices.filter(pk=pk).first()
+        except AttributeError:
+            return HttpResponseRedirect(reverse('auth_login'))
+        return super(DetailDeviceView, self).dispatch(request, *args, **kwargs)
+
 
 def verify_route_ownership(user, pk):
     """Verify that the pk matches a route owned by the user.
