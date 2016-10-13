@@ -102,9 +102,17 @@ class CreateDeviceViewTestCase(TestCase):
         """Check unauthenticated user is redirected."""
         self.client.logout()
         response = self.client.get(reverse('create_device'))
-        redirect_url = reverse('auth_login') + '?next=' + reverse('create_device')
-        self.assertRedirects(response, redirect_url)
+        url = reverse('auth_login') + '?next=' + reverse('create_device')
+        self.assertRedirects(response, url)
 
+    def test_unauthenticated_user_post_view(self):
+        """Check unauthenticated user is redirected on post."""
+        self.client.logout()
+        data = dict(mode='quiet')
+        response = self.client.post(reverse('create_device'), data)
+        url = reverse('auth_login') + '?next=' + reverse('create_device')
+        self.assertRedirects(response, url)
+        self.assertEqual(TrackerDevice.objects.count(), 0)
 
 
 class EditDeviceViewTestCase(TestCase):
