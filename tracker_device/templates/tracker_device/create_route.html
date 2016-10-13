@@ -6,8 +6,26 @@
   <section class="row">
     <form action=" " method="post" enctype="multipart/form-data">{% csrf_token %}
       {{ form|bootstrap }}
-      <button class="btn btn-lg btn-success btn-block" type="submit">Create New Route</button>
+      <div class="input-wrapper">
+        <label for="date">Date</label>
+        <div class="form-group input-daterange input-group" id="search-date">
+          <input type="text" class="form-control start" name="start" placeholder="start date" readonly required/>
+          <input type="text" class="form-control end" name="end" placeholder="end date" readonly required/>
+        </div>
+      <button class="btn btn-lg btn-success btn-block ladda-button" type="submit">Create New Route</button>
     </form>
   </section>
 </main>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+  <script>
+    $('#search-date').datepicker({
+      autoclose: true,
+      format: "yyyy-mm-dd",
+      todayHighlight: true,
+      orientation: "bottom auto"
+    });
+    </script>
 {% endblock %}

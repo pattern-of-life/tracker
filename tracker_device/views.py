@@ -112,10 +112,14 @@ class CreateRouteView(CreateView):
     fields = [
         "name",
         "description",
-        "start",
-        "end",
         "device",
     ]
+
+    def form_valid(self, form):
+        """Adding date view calendar picker."""
+        form.instance.start = self.request.POST['start'] + " 00:00"
+        form.instance.end = self.request.POST['end'] + " 00:00"
+        return super(CreateRouteView, self).form_valid(form)
 
 
 class EditRouteView(UpdateView):
