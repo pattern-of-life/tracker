@@ -11,20 +11,70 @@
 {% endblock %}
 
 {% block body %}
-  <h3>Route Detail View</h3>
-  <p>This is the device this route belongs to:</p>
-  {{ device.device_type }}
-  {{ device.title }}
-  {{ device.description }}
-  {{ device.mode }}
-  {{ device.date_created }}
-  <p>UUID: {{ device.id_uuid }}</p>
+  <h3>Route Detail View: {{ route.name }}</h3>
+  <h4>Route Details:</h4>
+  <ul>
+    <li>Route description: {{ route.description }}</li>
+    <li>Route start: {{ route.start }}</li>
+    <li>Route end: {{ route.end }}</li>
+  </ul>
+  <h4>This is the device this route belongs to:</h4>
+  <ul>
+    <li>Type: {{ device.device_type }}</li>
+    <li>Title: {{ device.title }}</li>
+    <li>Description: {{ device.description }}</li>
+    <li>Mode: {{ device.mode }}</li>
+    <li>Date Created: {{ device.date_created }}</li>
+    <li>UUID: {{ device.id_uuid }}</li>
+  </ul>
+  {% if data.count %}
+  <div>
+    <h3>Map of Data Points:</h3>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        var coords = [
+          {% for datum in data %}
+          {
+            lat: {{ datum.lat }},
+            lng: {{ datum.lng }},
+            title: "{{ datum.time }}"
+          },
+          {% endfor %}
+        ]
 
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: coords[0]
+        });
+
+        coords.forEach(function(coord) {
+          new google.maps.Marker({
+            position: coord,
+            map: map,
+            title: coord.title,
+          });
+        });
+
+        new google.maps.Polyline({
+          path: coords,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2,
+          map: map
+        })
+      }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ googleapikey }}&callback=initMap">
+    </script>
+  </div>
+  {% endif %}
   <div>
     <h3>Data Points</h3>
     <p>These are the 10 most recent data points on this route. Click <a href="#">here</a> for more.</p>
     <ul>
-      {% for datum in data %}
+      {% for datum in data_ten %}
         <li>
           {{ datum.time }},
           latitude {{ datum.lat }},
@@ -34,48 +84,4 @@
       {% endfor %}
     </ul>
   </div>
-
-  {% if data.count %}
-    <div>
-      <h3>Map of data points:</h3>
-      <div id="map"></div>
-      <script>
-        function initMap() {
-          var coords = [
-            {% for datum in data %}
-            {
-              lat: {{ datum.lat }},
-              lng: {{ datum.lng }},
-              title: "{{ datum.time }}"
-            },
-            {% endfor %}
-          ]
-
-          var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 4,
-            center: coords[0]
-          });
-
-          coords.forEach(function(coord) {
-            new google.maps.Marker({
-              position: coord,
-              map: map,
-              title: coord.title,
-            });
-          });
-
-          new google.maps.Polyline({
-            path: coords,
-            geodesic: true,
-            strokeColor: '#FF0000',
-            strokeOpacity: 1.0,
-            strokeWeight: 2,
-            map: map
-          })
-        }
-      </script>
-      <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ googleapikey }}&callback=initMap">
-      </script>
-    </div>
-  {% endif %}
 {% endblock %}

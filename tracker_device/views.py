@@ -86,6 +86,8 @@ class DetailDeviceView(DetailView):
         pk = kwargs['object'].pk
         device = TrackerDevice.objects.filter(pk=pk).first()
         context['device'] = device
+        routes = device.routes.all()
+        context['routes'] = routes
         context['googleapikey'] = os.environ.get('GOOGLE_MAPS_API_KEY')
         context['data'] = device.data.order_by('-time')[:10]
         return context
@@ -117,11 +119,11 @@ class CreateRouteView(CreateView):
         "device",
     ]
 
-    def dispatch(self, request, *args, **kwargs):
-        """Check if the route to create is owned by user."""
-        auth_errors = verify_route_ownership(request.user, kwargs.get('pk'))
-        super_dispatch = super(CreateRouteView, self).dispatch
-        return auth_errors or super_dispatch(request, *args, **kwargs)
+    # def dispatch(self, request, *args, **kwargs):
+    #     """Check if the route to create is owned by user."""
+    #     auth_errors = verify_route_ownership(request.user, kwargs.get('pk'))
+    #     super_dispatch = super(CreateRouteView, self).dispatch
+    #     return auth_errors or super_dispatch(request, *args, **kwargs)
 
 
 class EditRouteView(UpdateView):
@@ -157,20 +159,23 @@ class DeleteRouteView(DeleteView):
 class DetailRouteView(DetailView):
     """Show route details- data points that belong to that
     route and display them on a map."""
-    model = TrackerDevice
+    model = Route
     template_name = 'tracker_device/detail_route.html'
 
     def get_context_data(self, **kwargs):
-        context = super(DetailDeviceView, self).get_context_data(**kwargs)
-        pk = kwargs['object'].pk
-        route = Route.objects.filter(pk=pk).first()
+        # import pdb; pdb.set_trace()
+        context = super(DetailRouteView, self).get_context_data(**kwargs)
+        route = self.object
         context['route'] = route
-        device = TrackerDevice.objects.get(routes__contains=route).first()
+        device = route.device
         context['device'] = device
         context['googleapikey'] = os.environ.get('GOOGLE_MAPS_API_KEY')
-        context['data'] = DataPoint.objects.filter(
+        context['data_ten'] = DataPoint.objects.filter(
             time__range=(route.start, route.end)).filter(
             device=device).order_by('-time')[:10]
+        context['data'] = DataPoint.objects.filter(
+            time__range=(route.start, route.end)).filter(
+            device=device)
         return context
 
 
