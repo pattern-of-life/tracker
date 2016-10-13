@@ -233,7 +233,7 @@ class CreateRouteViewTestCase(TestCase):
         data = {
             "start": "10/21/2016",
             "device": self.device.pk
-            }
+        }
         response = self.client.post(reverse('create_route'), data)
         self.assertEqual(response.status_code, 302)
 
@@ -251,9 +251,9 @@ class CreateRouteViewTestCase(TestCase):
         """Test unauthorized user cannot create a route."""
         self.client.logout()
         data = {
-                "start": "10/21/2016",
-                "device": self.device.pk
-            }
+            "start": "10/21/2016",
+            "device": self.device.pk
+        }
         self.client.post(reverse('create_route'), data)
         total_routes = Route.objects.count()
         self.assertEqual(total_routes, 0)
@@ -272,9 +272,9 @@ class CreateRouteViewTestCase(TestCase):
         """Test wrong authorized user cannot create a route."""
         self.client.force_login(self.user2)
         data = {
-                "start": "10/21/2016",
-                "device": self.device.pk
-            }
+            "start": "10/21/2016",
+            "device": self.device.pk
+        }
         self.client.post(reverse('create_route'), data)
         total_routes = Route.objects.count()
         self.assertEqual(total_routes, 0)
@@ -564,3 +564,68 @@ class TestDetailDeviceView(TestCase):
         url = reverse('detail_device', args=[self.device.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
+
+class TestDetailRouteView(TestCase):
+    """Tests for detail route view."""
+
+    TEST_DATA = map(timezone.make_aware, [
+        timezone.datetime(1974, 5, 17, 0, 0),
+        timezone.datetime(1369, 4, 27, 0, 0),
+        timezone.datetime(2512, 12, 8, 0, 0),
+        timezone.datetime(2170, 1, 18, 0, 0),
+        timezone.datetime(1821, 5, 28, 0, 0),
+        timezone.datetime(2519, 9, 15, 0, 0),
+        timezone.datetime(1721, 7, 19, 0, 0),
+        timezone.datetime(2328, 6, 18, 0, 0),
+        timezone.datetime(2937, 12, 7, 0, 0),
+        timezone.datetime(2555, 11, 10, 0, 0),
+        timezone.datetime(2967, 8, 15, 0, 0),
+        timezone.datetime(2278, 10, 20, 0, 0),
+        timezone.datetime(1158, 5, 23, 0, 0),
+        timezone.datetime(2286, 2, 25, 0, 0),
+        timezone.datetime(2529, 5, 5, 0, 0),
+        timezone.datetime(2307, 2, 3, 0, 0),
+        timezone.datetime(1118, 5, 5, 0, 0),
+        timezone.datetime(2891, 7, 9, 0, 0),
+        timezone.datetime(2579, 6, 8, 0, 0),
+        timezone.datetime(2060, 10, 9, 0, 0),
+        timezone.datetime(2665, 1, 24, 0, 0),
+        timezone.datetime(2096, 8, 15, 0, 0),
+        timezone.datetime(2846, 4, 12, 0, 0),
+        timezone.datetime(2841, 6, 11, 0, 0),
+        timezone.datetime(1429, 5, 27, 0, 0),
+        timezone.datetime(1873, 12, 21, 0, 0),
+        timezone.datetime(1476, 2, 12, 0, 0),
+        timezone.datetime(2061, 1, 1, 0, 0),
+        timezone.datetime(2698, 8, 15, 0, 0),
+        timezone.datetime(1382, 9, 26, 0, 0)
+    ])
+
+    def setUp(self):
+        """Add a route with some data points to test."""
+        self.user = User(username='test user')
+        self.user.save()
+        self.device = TrackerDevice(user=self.user, title='test device')
+        self.device.save()
+        for i, date in enumerate(self.TEST_DATA):
+            DataPoint(
+                time=date,
+                lat=i,
+                lng=i+30,
+                elevation=i+60,
+                device=self.device
+            ).save()
+        start = timezone.datetime(1001, 1, 1)
+        end = timezone.datetime(2200, 1, 1)
+        self.route = Route(device=self.device, start=start, end=end)
+        self.route.save()
+        url = reverse('detail_route', args=[self.route.pk])
+        self.response = self.client.get(url)
+
+    def test_route_name_on_route_page(self):
+        """Test name of route on route page."""
+        self.assertContains(self.response, self.route.name)
+
+    def test_route_data_ten_has_ten(self):
+        """Test that context['data_ten'] has only 10 things in it."""
+        self.assertEqual(len(self.response.context['data_ten']), 10)

@@ -11,27 +11,25 @@
 {% endblock %}
 
 {% block body %}
-  <h3>Device Detail View</h3>
-  {{ device.device_type }}
-  {{ device.title }}
-  {{ device.description }}
-  {{ device.mode }}
-  {{ device.date_created }}
-  <p>UUID: {{ device.id_uuid }}</p>
-  {% if routes %}
+  <h3>Route Detail View: {{ route.name }}</h3>
+  <h4>Route Details:</h4>
+  <ul>
+    <li>Route description: {{ route.description }}</li>
+    <li>Route start: {{ route.start }}</li>
+    <li>Route end: {{ route.end }}</li>
+  </ul>
+  <h4>This is the device this route belongs to:</h4>
+  <ul>
+    <li>Type: {{ device.device_type }}</li>
+    <li>Title: {{ device.title }}</li>
+    <li>Description: {{ device.description }}</li>
+    <li>Mode: {{ device.mode }}</li>
+    <li>Date Created: {{ device.date_created }}</li>
+    <li>UUID: {{ device.id_uuid }}</li>
+  </ul>
+  {% if data.count %}
   <div>
-    <h3>Routes</h3>
-    <p>These routes belong to your device.</p>
-    <ul>
-      {% for route in routes %}
-        <li><a href="{% url 'detail_route' route.pk %}">{{ route.name }}: {{ route.description }}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
-  {% if device.data.count %}
-  <div>
-    <h3>Map of data points:</h3>
+    <h3>Map of Data Points:</h3>
     <div id="map"></div>
     <script>
       function initMap() {
@@ -74,15 +72,15 @@
   {% endif %}
   <div>
     <h3>Data Points</h3>
-    <p>These are your 10 most recent data points. Click here for more.</p>
+    <p>These are the 10 most recent data points on this route. Click <a href="#">here</a> for more.</p>
     <ul>
-      {% for datum in data %}
-      <li>
-        {{ datum.time }},
-        latitude {{ datum.lat }},
-        longitude {{ datum.lng }},
-        {{ datum.elevation }} meters
-      </li>
+      {% for datum in data_ten %}
+        <li>
+          {{ datum.time }},
+          latitude {{ datum.lat }},
+          longitude {{ datum.lng }},
+          {{ datum.elevation }} meters
+        </li>
       {% endfor %}
     </ul>
   </div>
