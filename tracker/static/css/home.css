@@ -32,8 +32,9 @@ body {
 }
 
 #home h2 {
-    margin-top: 8em;
+    margin-top: 2.88em;
     font-weight: bolder;
+    font-size: 5em;
 }
 
 #base nav .navbar-right a {

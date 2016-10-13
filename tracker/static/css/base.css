@@ -18,3 +18,25 @@
 #base {
     text-align: center;
 }
+
+.mug {
+    height: 8em;
+    width: 8em;
+}
+
+#about .row {
+    padding-bottom: 1em;
+}
+
+#about .projectlink {
+    font-size: 1.5em;
+}
+
+#about h2 {
+    margin-bottom: 1.5em;
+}
+
+#about .blurb {
+    text-align: left;
+    font-size: 1.3em;
+}
