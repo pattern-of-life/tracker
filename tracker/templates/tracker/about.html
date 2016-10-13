@@ -5,34 +5,31 @@
   <link type="text/css" rel="stylesheet" href="{% static "css/home.css" %}" charset="utf-8">
 {% endblock %}
 {% block body %}
-  <div id="about" class="container">
+  <div id="about" class="container jumbotron">
     <div>
       <h2>About The Site</h2>
+      <p class="make-skinny">The goal of this project is to demonstrate proof-of-concept for a small form factor python based hardware tracking device using GPS and GSM connectivity.</p>
     </div>
 
     <div>
       <div class="row">
         <div class="col-sm-2 col-sm-offset-1 img-shift">
-          <img class="mug" src="{% static 'images/django.png' %}">
+          <img class="mug" src="{% static 'images/cropped_splash.jpg' %}">
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-8 project-spacer">
           <p class="blurb">
-            <a class="projectlink" href="https://github.com/pattern-of-life/tracker">
-              Django App
-            </a>
+            <a class="projectlink" href="https://github.com/pattern-of-life/tracker">Website Source</a>
           </p>
         </div>
       </div>
 
       <div class="row">
         <div class="col-sm-2 col-sm-offset-1 img-shift">
-          <img class="mug" src="{% static 'images/splash.jpg' %}">
+          <img class="mug" src="{% static 'images/device.jpg' %}">
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-8 project-spacer">
           <p class="blurb">
-            <a class="projectlink" href="https://github.com/pattern-of-life/tracker-hardware">
-              Firmware
-            </a>
+            <a class="projectlink" href="https://github.com/pattern-of-life/tracker-hardware">Device Firmware</a>
           </p>
         </div>
       </div>
@@ -41,40 +38,48 @@
         <div class="col-sm-2 col-sm-offset-1 img-shift">
           <img class="mug" src="{% static 'images/ansible.png' %}">
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-8 project-spacer">
           <p class="blurb">
-            <a class="projectlink" href="https://github.com/pattern-of-life/trackerpy-ansible">
-              Ansible Playbook
-            </a>
+            <a class="projectlink" href="https://github.com/pattern-of-life/trackerpy-ansible">Ansible Playbook</a>
           </p>
         </div>
       </div>
     </div>
 
     <div>
-      <h2>About The Team</h2>
-      
+      <h2 class="about_team_spacer">About The Team</h2>
+
       <div class="row">
         <div class="col-sm-2 col-sm-offset-1 img-shift">
-          <img class="mug" src="{% static 'images/david photo.jpg' %}">
-          <div><strong>David Banks</strong></div>
+          <a href="https://www.linkedin.com/in/david-banks">
+            <img class="mug" src="{% static 'images/david photo.jpg' %}">
+          </a>
+          <div>
+            <a href="https://github.com/crashtack">
+              <strong>David Banks</strong>
+            </a>
+          </div>
         </div>
         <div class="col-sm-8">
           <p class="blurb">
-            Hi, my name is David, I enjoy moonlighting on the town with my beautiful wife.  I also enjoy diddling with hardware, writing mean Python code and going to the shooting range.
+            Hi, my name is David, I enjoy nights out on the town with my beautiful wife, diddling with hardware, writing awesome Python code and going to the shooting range.
           </p>
         </div>
       </div>
 
       <div class="row">
         <div class="col-sm-2 col-sm-offset-1 img-shift">
-          <img class="mug" src="{% static 'images/derek photo.jpg' %}">
-          <div><strong>Derek Hewitt</strong></div>
-        </div>
-        <div class="col-sm-8">
-          <p class="blurb">
-            Hi, I'm Derek, 6 foot 3 inches tall, single and looking.  Skilled in the art of survival, programing in Python, and quilting, hit me up on my github or linkedin.
-          </p>
+          <a href="https://www.linkedin.com/in/derek-hewitt">
+            <img class="mug" src="{% static 'images/derek photo.jpg' %}">
+          </a>
+          <div>
+            <a href="https://github.com/derekmhewitt">
+              <strong>Derek Hewitt</strong></div>
+            </a>
+          </div>
+          <div class="col-sm-8">
+            <p class="blurb">Derek is a developer, a veteran and a life-long learner.  He loves dogs, coffee and good beer.  In his time off he enjoys gaming and..  well pretty much just gaming.  Derek is a long time EVE Online player and 3k MMR scrub in Dota2.  But he has lots of hats so it's fine.</p>
+          </div>
         </div>
       </div>
 
@@ -82,27 +87,31 @@
         <div class="col-sm-2 col-sm-offset-1 img-shift">
           <img class="mug" src="{% static 'images/justin photo.jpg' %}">
           <div>
-            <strong>Justin Lange</strong>
+            <a href="https://github.com/welliam">
+              <strong>Justin Lange</strong>
+            </a>
           </div>
         </div>
         <div class="col-sm-8">
-          <p class="blurb">
-            Hi, I'm J-Dizzle or that's what all the other programming wizards call me.  I don't bother learning new languages, I write them myself. Code fellows needs to step up their game because I don't drink tap water.
-          </p>
+          <p class="blurb">Hi, I'm J-Dizzle or that's what all the other programming wizards call me.  I don't bother learning new languages, I write them myself. Code fellows needs to step up their game because I don't drink tap water.</p>
         </div>
       </div>
 
       <div class="row">
         <div class="col-sm-2 col-sm-offset-1 img-shift">
-          <img class="mug" src="{% static 'images/victor photo.jpg' %}">
-          <div><strong>Victor Benavente</strong></div>
+          <a href="https://www.linkedin.com/in/vbenavente">
+            <img class="mug" src="{% static 'images/victor photo.jpg' %}">
+          </a>
+          <div>
+            <a href="https://github.com/vbenavente">
+              <strong>Victor Benavente</strong>
+            </a>
+          </div>
         </div>
         <div class="col-sm-8">
-          <p class="blurb">
-            Hi, I'm Vic, when I'm not programming JavaScript by mistake in my Python class, I'm getting drunk and losing my bookbag in Downtown Seattle, then I have to go to Lake City and try and retrieve it.  Lame.
-          </p>
+          <p class="blurb">Hi, I'm Vic, when I'm not programming JavaScript by mistake in my Python class, I'm getting drunk and losing my bookbag in Downtown Seattle, then I have to go to Lake City and try and retrieve it.  Lame.</p>
         </div>
       </div>
     </div>
-    </div>
-  {% endblock %}
+  </div>
+{% endblock %}
