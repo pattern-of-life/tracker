@@ -101,7 +101,7 @@ class DetailDeviceView(DetailView):
             return HttpResponseRedirect(reverse('auth_login'))
         if device:
             super_dispatch = super(DetailDeviceView, self).dispatch
-            return super_dispatch (request, *args, **kwargs)
+            return super_dispatch(request, *args, **kwargs)
         else:
             return HttpResponseForbidden()
 
