@@ -14,7 +14,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
         return self.request.user.profile
 
 
-class EditProfileView(UpdateView):
+class EditProfileView(LoginRequiredMixin, UpdateView):
     """View for profile."""
     model = TrackerProfile
     fields = [

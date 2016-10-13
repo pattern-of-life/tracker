@@ -93,3 +93,9 @@ class TrackerProfileEditViewTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         actual_bio = User.objects.first().profile.bio
         self.assertEqual(actual_bio, expected_bio)
+
+    def test_edit_profile_login_required(self):
+        """Test profile redirects to login."""
+        self.client.logout()
+        response = self.client.get(reverse('edit_profile'))
+        self.assertEqual(response.status_code, 302)
