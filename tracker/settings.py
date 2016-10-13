@@ -20,7 +20,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 ALLOWED_HOSTS = ['.us-west-2.compute.amazonaws.com', '.trackerpy.com']
-EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND"
+    "django.core.mail.backends.console.EmailBackend"
+)
 EMAIL_HOST = os.environ.get("EMAIL_HOST")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrapform',
     'tracker_profile',
     'tracker_device'
 ]
@@ -141,6 +145,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "tracker", "static")
+]
 
 ACCOUNT_ACTIVATION_DAYS = 7
 

@@ -1,0 +1,42 @@
+#base {
+    font-weight: bold;
+}
+
+#base .navbar-brand {
+    background: linear-gradient(to top, #891A00, #FB7600);
+    border-radius: .3em;
+}
+
+#base nav a {
+    font-size: 1.5em;
+}
+
+#base nav {
+    margin-top: 1em;
+}
+
+#base {
+    text-align: center;
+}
+
+.mug {
+    height: 8em;
+    width: 8em;
+}
+
+#about .row {
+    padding-bottom: 1em;
+}
+
+#about .projectlink {
+    font-size: 1.5em;
+}
+
+#about h2 {
+    margin-bottom: 1.5em;
+}
+
+#about .blurb {
+    text-align: left;
+    font-size: 1.3em;
+}
