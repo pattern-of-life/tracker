@@ -25,6 +25,19 @@
     width: 8em;
 }
 
+#create-data {
+  background-color: #601D01;
+  color: white;
+}
+
+#create-data button {
+  background-color: orange;
+}
+
+#about {
+    background-color: #203454;
+}
+
 #about .row {
     padding-bottom: 1em;
 }
@@ -33,8 +46,13 @@
     font-size: 1.5em;
 }
 
+#about .project-spacer {
+    margin-top: 2.5em;
+}
+
 #about h2 {
     margin-bottom: 1.5em;
+    text-align: center;
 }
 
 #about .blurb {
@@ -42,11 +60,16 @@
     font-size: 1.3em;
 }
 
-#create-data {
-  background-color: #601D01;
-  color: white;
+#about .make-skinny {
+    width: 65%;
+    margin: 0 auto 2.25em auto;
+    text-align: center;
 }
 
-#create-data button {
-  background-color: orange;
+#about .about_team_spacer {
+    margin-top: 1em;
+}
+
+#about p {
+  color: white;
 }

@@ -4,12 +4,12 @@
 
 ## Project Summary:
 
-The goal of this project is to demonstrate proof-of-concept for a small form factor python based hardware tracking device.
+The goal of this project is to demonstrate proof-of-concept for a small form factor python based hardware tracking device using GPS and GSM connectivity.
 
 Minimum Viable Product Goals:
 - Transmit GPS data in realtime from a hardware device
 - Store GPS data for later transmission on said device if transmission is not possible at a given time
-- Log said data as it's received by our server's API endpoint
+- Log said data as it's received by our API endpoint
 - Allow user to create a new account, add and remove devices, data points, routes, etc
 - Display tracking and site data in an attractive, professional format
 
@@ -18,7 +18,7 @@ Stretch Goals:
   - Adjustment of 'blackout' periods
   - Adjustment of logging/transmission intervals
   - Automatic logging/termination of signal based on position or 'fences'
-- Additional battery sources
+- Additional battery sources and transmit information on battery state
 - Improve device packaging and presentation
 
 See Github Issues for additional Stretch Goal information.  Issues marked 'S#' are stretch goals, with the # denoting the difficuty of the task.
