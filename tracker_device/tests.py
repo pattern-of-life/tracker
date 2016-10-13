@@ -565,6 +565,7 @@ class TestDetailDeviceView(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
 
+
 class TestDetailRouteView(TestCase):
     """Tests for detail route view."""
 
@@ -615,8 +616,8 @@ class TestDetailRouteView(TestCase):
                 elevation=i+60,
                 device=self.device
             ).save()
-        start = timezone.datetime(1001, 1, 1)
-        end = timezone.datetime(2200, 1, 1)
+        start = timezone.make_aware(timezone.datetime(1001, 1, 1))
+        end = timezone.make_aware(timezone.datetime(2200, 1, 1))
         self.route = Route(device=self.device, start=start, end=end)
         self.route.save()
         url = reverse('detail_route', args=[self.route.pk])
