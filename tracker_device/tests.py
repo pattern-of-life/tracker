@@ -539,3 +539,12 @@ class TestDetailDeviceView(TestCase):
         url = reverse('detail_device', args=[self.device.pk])
         response = self.client.get(url)
         self.assertRedirects(response, reverse('auth_login'))
+
+    def test_get_page_wrong_user(self):
+        """Test redirects when unauthenticated"""
+        other_user = User(username='wrong')
+        other_user.save()
+        self.client.force_login(other_user)
+        url = reverse('detail_device', args=[self.device.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)

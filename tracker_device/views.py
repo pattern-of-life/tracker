@@ -95,10 +95,14 @@ class DetailDeviceView(DetailView):
         """Check if the device to view is owned by user."""
         pk = kwargs.get('pk')
         try:
-            request.user.devices.filter(pk=pk).first()
+            device = request.user.devices.filter(pk=pk).first()
         except AttributeError:
             return HttpResponseRedirect(reverse('auth_login'))
-        return super(DetailDeviceView, self).dispatch(request, *args, **kwargs)
+        if device:
+            super_dispatch = super(DetailDeviceView, self).dispatch
+            return super_dispatch (request, *args, **kwargs)
+        else:
+            return HttpResponseForbidden()
 
 
 def verify_route_ownership(user, pk):
