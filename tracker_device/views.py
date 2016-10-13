@@ -119,12 +119,6 @@ class CreateRouteView(CreateView):
         "device",
     ]
 
-    # def dispatch(self, request, *args, **kwargs):
-    #     """Check if the route to create is owned by user."""
-    #     auth_errors = verify_route_ownership(request.user, kwargs.get('pk'))
-    #     super_dispatch = super(CreateRouteView, self).dispatch
-    #     return auth_errors or super_dispatch(request, *args, **kwargs)
-
 
 class EditRouteView(UpdateView):
     """View for editing a route."""

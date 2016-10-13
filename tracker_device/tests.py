@@ -217,7 +217,7 @@ class CreateRouteViewTestCase(TestCase):
         data = {
             "start": "10/21/2016",
             "device": self.device.pk
-            }
+        }
         response = self.client.post(reverse('create_route'), data)
         self.assertEqual(response.status_code, 302)
 
@@ -235,9 +235,9 @@ class CreateRouteViewTestCase(TestCase):
         """Test unauthorized user cannot create a route."""
         self.client.logout()
         data = {
-                "start": "10/21/2016",
-                "device": self.device.pk
-            }
+            "start": "10/21/2016",
+            "device": self.device.pk
+        }
         self.client.post(reverse('create_route'), data)
         total_routes = Route.objects.count()
         self.assertEqual(total_routes, 0)
@@ -256,9 +256,9 @@ class CreateRouteViewTestCase(TestCase):
         """Test wrong authorized user cannot create a route."""
         self.client.force_login(self.user2)
         data = {
-                "start": "10/21/2016",
-                "device": self.device.pk
-            }
+            "start": "10/21/2016",
+            "device": self.device.pk
+        }
         self.client.post(reverse('create_route'), data)
         total_routes = Route.objects.count()
         self.assertEqual(total_routes, 0)
