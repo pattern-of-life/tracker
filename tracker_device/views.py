@@ -9,7 +9,8 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
-    DetailView,)
+    DetailView,
+)
 
 
 class CreateDeviceView(CreateView):
@@ -117,6 +118,12 @@ class CreateRouteView(CreateView):
         "device",
     ]
 
+    def dispatch(self, request, *args, **kwargs):
+        """Check if the route to create is owned by user."""
+        auth_errors = verify_route_ownership(request.user, kwargs.get('pk'))
+        super_dispatch = super(CreateRouteView, self).dispatch
+        return auth_errors or super_dispatch(request, *args, **kwargs)
+
 
 class EditRouteView(UpdateView):
     """View for editing a route."""
@@ -173,7 +180,7 @@ class CreateDataPointView(CreateView):
     model = Route
     form_class = CreateDataPointForm
     template_name = 'tracker_device/create_data_point.html'
-    success_url = reverse_lazy('profile')
+    success_url = reverse_lazy('homepage')
 
     def form_valid(self, form):
         """Attach the right device to the form.

@@ -435,6 +435,19 @@ class CreateDataPointViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(DataPoint.objects.count(), 0)
 
+    def test_create_data_point_unauthenticated(self):
+        """Test data point redirects to home page."""
+        data = dict(
+            time='10/10/10',
+            lat=323.0,
+            lng=232.0,
+            elevation=15.3,
+            uuid=self.device.id_uuid
+        )
+        url = reverse('create_data_point')
+        response = self.client.post(url, data, follow=True)
+        self.assertRedirects(response, reverse('homepage'))
+
 
 class TestDetailDeviceView(TestCase):
     """Tests for detail device view."""
