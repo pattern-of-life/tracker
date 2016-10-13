@@ -206,6 +206,11 @@ class CreateRouteViewTestCase(TestCase):
         self.client.force_login(user)
         self.device = TrackerDevice(user=user)
         self.device.save()
+        self.post_data = {
+            'start': '2016-10-10',
+            'end': '2016-10-10',
+            'device': self.device.pk
+        }
 
     def test_create_route_status_code(self):
         """Test status code is 200 for new route creation."""
@@ -214,52 +219,32 @@ class CreateRouteViewTestCase(TestCase):
 
     def test_create_route_post_status_code(self):
         """Test status code after post is 302."""
-        data = {
-            "start": "10/21/2016",
-            "device": self.device.pk
-        }
-        response = self.client.post(reverse('create_route'), data)
+        response = self.client.post(reverse('create_route'), self.post_data)
         self.assertEqual(response.status_code, 302)
 
     def test_create_route_unauth_user(self):
         """Test unauthorized user cannot create routes."""
         self.client.logout()
-        data = {
-            "start": "10/21/2016",
-            "device": self.device.pk
-        }
-        response = self.client.post(reverse('create_route'), data)
+        response = self.client.post(reverse('create_route'), self.post_data)
         self.assertEqual(response.status_code, 302)
 
     def test_create_route_unauth_user_no_route_in_db(self):
         """Test unauthorized user cannot create a route."""
         self.client.logout()
-        data = {
-            "start": "10/21/2016",
-            "device": self.device.pk
-        }
-        self.client.post(reverse('create_route'), data)
+        self.client.post(reverse('create_route'), self.post_data)
         total_routes = Route.objects.count()
         self.assertEqual(total_routes, 0)
 
     def test_create_route_wrong_user(self):
         """Test wrong authorized user cannot create route for other user."""
         self.client.force_login(self.user2)
-        data = {
-            "start": "10/21/2016",
-            "device": self.device.pk
-        }
-        response = self.client.post(reverse('create_route'), data)
+        response = self.client.post(reverse('create_route'), self.post_data)
         self.assertEqual(response.status_code, 403)
 
     def test_create_route_wrong_user_no_route_in_db(self):
         """Test wrong authorized user cannot create a route."""
         self.client.force_login(self.user2)
-        data = {
-            "start": "10/21/2016",
-            "device": self.device.pk
-        }
-        self.client.post(reverse('create_route'), data)
+        self.client.post(reverse('create_route'), self.post_data)
         total_routes = Route.objects.count()
         self.assertEqual(total_routes, 0)
 
@@ -573,6 +558,7 @@ class TestDetailRouteView(TestCase):
         start = timezone.datetime(1001, 1, 1)
         end = timezone.datetime(2200, 1, 1)
         self.route = Route(device=self.device, start=start, end=end)
+        self.route.save()
         url = reverse('detail_route', args=[self.route.pk])
         self.response = self.client.get(url)
         # self.data = self.device.data.order_by('-time')
@@ -584,4 +570,4 @@ class TestDetailRouteView(TestCase):
     def test_route_data_ten_has_ten(self):
         """Test that context['data_ten'] has only 10 things in it."""
         # import pdb;pdb.set_trace()
-        self.assertEqual(len(self.response.context['data_ten']) == 10)
+        self.assertEqual(len(self.response.context['data_ten']), 10)
