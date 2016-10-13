@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ALLOWED_HOSTS = ['.us-west-2.compute.amazonaws.com', '.trackerpy.com']
 EMAIL_BACKEND = os.environ.get(
-    "EMAIL_BACKEND"
+    "EMAIL_BACKEND",
     "django.core.mail.backends.console.EmailBackend"
 )
 EMAIL_HOST = os.environ.get("EMAIL_HOST")
