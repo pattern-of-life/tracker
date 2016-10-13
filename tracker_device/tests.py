@@ -570,13 +570,18 @@ class TestDetailRouteView(TestCase):
                 elevation=i+60,
                 device=self.device
             ).save()
-        url = reverse('detail_device', args=[self.device.pk])
         start = timezone.datetime(1001, 1, 1)
         end = timezone.datetime(2200, 1, 1)
         self.route = Route(device=self.device, start=start, end=end)
+        url = reverse('detail_route', args=[self.route.pk])
         self.response = self.client.get(url)
         # self.data = self.device.data.order_by('-time')
 
-    def test_title_on_route_page(self):
-        """Test title of device on route page."""
-        self.assertContains(self.response, self.device.title)
+    def test_route_name_on_route_page(self):
+        """Test name of route on route page."""
+        self.assertContains(self.response, self.route.name)
+
+    def test_route_data_ten_has_ten(self):
+        """Test that context['data_ten'] has only 10 things in it."""
+        # import pdb;pdb.set_trace()
+        self.assertEqual(len(self.response.context['data_ten']) == 10)
