@@ -1,3 +1,17 @@
+.btn {
+  background: linear-gradient(to top, #891A00, #FB7600);
+  color: white;
+}
+
+.btn:hover {
+  color: #203454;
+  font-weight: bold;
+}
+
+label {
+  font-size: 1.5em;
+}
+
 #base {
     font-weight: bold;
 }
@@ -20,9 +34,18 @@
     text-align: center;
 }
 
-.mug {
-    height: 8em;
-    width: 8em;
+#create-device {
+  background: #203454;
+  color: white;
+}
+
+
+#create-device input {
+  font-size: 1.5em;
+}
+
+#create-device select {
+  font-size: 1.5em
 }
 
 #create-data {
@@ -30,8 +53,9 @@
   color: white;
 }
 
-#create-data button {
-  background-color: orange;
+#about .mug {
+  height: 8em;
+  width: 8em;
 }
 
 #about {
