@@ -98,6 +98,14 @@ class CreateDeviceViewTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(TrackerDevice.objects.count(), 1)
 
+    def test_unauthenticated_user_get_view(self):
+        """Check unauthenticated user is redirected."""
+        self.client.logout()
+        response = self.client.get(reverse('create_device'))
+        redirect_url = reverse('auth_login') + '?next=' + reverse('create_device')
+        self.assertRedirects(response, redirect_url)
+
+
 
 class EditDeviceViewTestCase(TestCase):
     """Test case for editing existing devices."""

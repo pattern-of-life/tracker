@@ -1,5 +1,6 @@
 import os
 from django import forms
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.urls import reverse, reverse_lazy
@@ -13,7 +14,7 @@ from django.views.generic import (
 )
 
 
-class CreateDeviceView(CreateView):
+class CreateDeviceView(LoginRequiredMixin, CreateView):
     """View for creating a new device."""
     model = TrackerDevice
     fields = [
