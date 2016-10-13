@@ -5,6 +5,7 @@
 #base .navbar-brand {
     background: linear-gradient(to top, #891A00, #FB7600);
     border-radius: .3em;
+    color: white;
 }
 
 #base nav a {
@@ -39,4 +40,13 @@
 #about .blurb {
     text-align: left;
     font-size: 1.3em;
+}
+
+#create-data {
+  background-color: #601D01;
+  color: white;
+}
+
+#create-data button {
+  background-color: orange;
 }

@@ -2,15 +2,14 @@
 {% load bootstrap %}
 
 {% block body %}
-<main class="container-fluid portal-main">
+<main id="create-data" class="container-fluid portal-main jumbotron">
   <section class="row">
     <form action=" " method="post" enctype="multipart/form-data">{% csrf_token %}
       {{ form|bootstrap }}
-      <button class="btn btn-lg btn-success btn-block" type="submit">
+      <button class="btn btn-lg btn-block" type="submit">
         Create Data Point
       </button>
     </form>
   </section>
 </main>
 {% endblock %}
-
