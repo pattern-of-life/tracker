@@ -1,6 +1,7 @@
 .btn {
   background: linear-gradient(to top, #891A00, #FB7600);
   color: white;
+  font-weight: bold;
 }
 
 .btn:hover {
@@ -38,6 +39,16 @@ li {
     text-align: center;
 }
 
+#edit_profile {
+    background: #203454;
+    color: white;
+    text-align: left;
+}
+
+#edit_profile input {
+  font-size: 1.5em;
+}
+
 #profile {
     background: #203454;
     color: white;
@@ -68,7 +79,6 @@ li {
   background: #203454;
   color: white;
 }
-
 
 #create-device input {
   font-size: 1.5em;
