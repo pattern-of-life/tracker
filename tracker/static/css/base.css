@@ -84,20 +84,12 @@ li {
   font-size: 1.5em;
 }
 
-#create-device select {
-  font-size: 1.5em
-}
-
 #create-route {
   background: #203454;
   color: white;
 }
 
 #create-route input {
-  font-size: 1.5em;
-}
-
-#create-route select {
   font-size: 1.5em;
 }
 
