@@ -1,80 +1,107 @@
 {% extends "tracker/base.html" %}
 
 {% block head %}
-  <style>
+<style>
   #map {
-      height: 50em;
-      width: 100%;
-      max-width: 80em;
+  height: 50em;
+  width: 100%;
+  max-width: 80em;
   }
-  </style>
+</style>
 {% endblock %}
 
 {% block body %}
-  <h3>{{ device.title }}</h3>
-  {{ device.device_type }}
-  {{ device.title }}
-  {{ device.description }}
-  {{ device.mode }}
-  {{ device.date_created }}
-  <p>UUID: {{ device.id_uuid }}</p>
+<div id="device-detail" class="jumbotron">
+  <h2>
+    {% if device.title %}
+      {{ device.title }}
+    {% else %}
+      Device
+    {% endif %}
+  </h2>
+  <div><a class="btn" href="{% url 'edit_device' device.pk %}">Edit</a></div>
+  <div class="metadata">
+    <div class="row">
+      Type:
+      {% if device.device_type %}
+        {{ device.device_type }}
+      {% else %}
+        <a href="{% url 'edit_device' device.pk %}">set device type</a>
+      {% endif %}
+    </div>
+    <div class="row">
+      Description:
+      {% if device.description %}
+        {{ device.description }}
+      {% else %}
+        <a href="{% url 'edit_device' device.pk %}">set description</a>
+      {% endif %}
+    </div>
+    <div class="row">
+      Mode: {{ device.mode }}
+    </div>
+    <div class="row">
+      Date created: {{ device.date_created }}
+    </div>
+    <div class="row">
+      UUID: {{ device.id_uuid }}
+    </div>
+  </div>
   {% if routes %}
   <div>
     <h3>Routes</h3>
     <p>These routes belong to your device.</p>
     <ul>
       {% for route in routes %}
-        <li><a href="{% url 'detail_route' route.pk %}">{{ route.name }}: {{ route.description }}</a></li>
+      <li><a href="{% url 'detail_route' route.pk %}">{{ route.name }}: {{ route.description }}</a></li>
       {% endfor %}
     </ul>
   </div>
   {% endif %}
   {% if device.data.count %}
   <div>
-    <h3>Map of data points:</h3>
     <div id="map"></div>
     <script>
-      function initMap() {
-        var coords = [
-          {% for datum in data %}
-          {
-            lat: {{ datum.lat }},
-            lng: {{ datum.lng }},
-            title: "{{ datum.time }}"
-          },
-          {% endfor %}
-        ]
+    function initMap() {
+      var coords = [
+        {% for datum in data %}
+        {
+          lat: {{ datum.lat }},
+          lng: {{ datum.lng }},
+          title: "{{ datum.time }}"
+        },
+        {% endfor %}
+      ]
 
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 8,
-          center: coords[0]
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: coords[0]
+      });
+
+      coords.forEach(function(coord) {
+        new google.maps.Marker({
+          position: coord,
+          map: map,
+          title: coord.title,
         });
+      });
 
-        coords.forEach(function(coord) {
-          new google.maps.Marker({
-            position: coord,
-            map: map,
-            title: coord.title,
-          });
-        });
-
-        new google.maps.Polyline({
-          path: coords,
-          geodesic: true,
-          strokeColor: '#FF0000',
-          strokeOpacity: 1.0,
-          strokeWeight: 2,
-          map: map
-        })
-      }
+      new google.maps.Polyline({
+        path: coords,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+        map: map
+      })
+    }
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ googleapikey }}&callback=initMap">
     </script>
   </div>
   {% endif %}
   <div>
-    <h3>Data Points</h3>
-    <p>These are your 10 most recent data points. Click here for more.</p>
+    <h3>Most Recent Data Points</h3>
     <ul>
       {% for datum in data %}
       <li>
@@ -85,5 +112,6 @@
       </li>
       {% endfor %}
     </ul>
+  </div>
   </div>
 {% endblock %}

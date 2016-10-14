@@ -67,6 +67,10 @@ li {
     font-weight: bold;
 }
 
+#profile a.btn:hover {
+  color: #203454;
+}
+
 #profile .leftaligned {
     text-align: left;
 }
@@ -141,4 +145,39 @@ li {
 
 #about p {
   color: white;
+}
+
+#device-detail {
+    text-align: center;
+    background: #203454;
+    color: white;
+    text-align: center;
+}
+
+#device-detail h2 {
+    font-size: 3em;
+}
+
+#device-detail a.btn {
+    font-size: 1.2em;
+    color: white;
+    font-weight: bold;
+}
+
+#device-detail a.btn:hover {
+  color: #203454;
+  font-weight: bold;
+}
+
+#device-detail .metadata {
+    text-align: left;
+    font-size: 2em;
+}
+
+#device-detail #map {
+    border: solid #FB7600;
+}
+
+#device-detail a {
+    color: #FB7600;
 }
