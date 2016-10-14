@@ -128,8 +128,6 @@ class EditRouteForm(forms.ModelForm):
         fields = [
             'name',
             'description',
-            'start',
-            'end',
             'device'
         ]
 
