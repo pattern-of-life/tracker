@@ -12,6 +12,10 @@ label {
   font-size: 1.5em;
 }
 
+li {
+  list-style-type: none;
+}
+
 #base {
     font-weight: bold;
 }
@@ -32,6 +36,32 @@ label {
 
 #base {
     text-align: center;
+}
+
+#profile {
+    background: #203454;
+    color: white;
+    text-align: center;
+    font-size: 2em;
+}
+
+#profile h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#profile a.btn {
+    font-size: 0.7em;
+    color: white;
+    font-weight: bold;
+}
+
+#profile .leftaligned {
+    text-align: left;
+}
+
+#profile a {
+    color: #FB7600;
 }
 
 #create-device {
