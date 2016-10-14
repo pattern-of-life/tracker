@@ -602,6 +602,7 @@ class TestDetailRouteView(TestCase):
         """Add a route with some data points to test."""
         self.user = User(username='test user')
         self.user.save()
+        self.client.force_login(self.user)
         self.device = TrackerDevice(user=self.user, title='test device')
         self.device.save()
         for i, date in enumerate(self.TEST_DATA):
@@ -616,8 +617,8 @@ class TestDetailRouteView(TestCase):
         end = timezone.make_aware(timezone.datetime(2200, 1, 1))
         self.route = Route(device=self.device, start=start, end=end)
         self.route.save()
-        url = reverse('detail_route', args=[self.route.pk])
-        self.response = self.client.get(url)
+        self.url = reverse('detail_route', args=[self.route.pk])
+        self.response = self.client.get(self.url)
 
     def test_route_name_on_route_page(self):
         """Test name of route on route page."""
@@ -626,3 +627,17 @@ class TestDetailRouteView(TestCase):
     def test_route_data_ten_has_ten(self):
         """Test that context['data_ten'] has only 10 things in it."""
         self.assertEqual(len(self.response.context['data_ten']), 10)
+
+    def test_unauthenticated_user_get_view(self):
+        """Test unauthenticated users getting route redirects to login."""
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_wrong_user_get_view(self):
+        """Test users cannot view each other's views."""
+        user = User(username='someoneelse')
+        user.save()
+        self.client.force_login(user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)
