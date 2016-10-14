@@ -11,22 +11,24 @@
 {% endblock %}
 
 {% block body %}
-  <h3>Route Detail View: {{ route.name }}</h3>
-  <h4>Route Details:</h4>
-  <ul>
-    <li>Route description: {{ route.description }}</li>
-    <li>Route start: {{ route.start }}</li>
-    <li>Route end: {{ route.end }}</li>
-  </ul>
-  <h4>This is the device this route belongs to:</h4>
-  <ul>
-    <li>Type: {{ device.device_type }}</li>
-    <li>Title: {{ device.title }}</li>
-    <li>Description: {{ device.description }}</li>
-    <li>Mode: {{ device.mode }}</li>
-    <li>Date Created: {{ device.date_created }}</li>
-    <li>UUID: {{ device.id_uuid }}</li>
-  </ul>
+  <div id="detail-route" class="jumbotron">
+  <div class="metadata">
+    <h3>
+      {% if route.title %}
+      {% endif %}
+    </h3>
+    <ul>
+      <li>Route description: {{ route.description }}</li>
+      <li>Route start: {{ route.start }}</li>
+      <li>Route end: {{ route.end }}</li>
+      <li>
+        Device:
+        <a href="{% url 'detail_device' device.pk %}">
+          {% if device.title %}{{ device.title }}{% else %}Link{% endif %}
+        </a>
+      </li>
+    </ul>
+  </div>
   {% if data.count %}
   <div>
     <h3>Map of Data Points:</h3>
@@ -71,8 +73,7 @@
   </div>
   {% endif %}
   <div>
-    <h3>Data Points</h3>
-    <p>These are the 10 most recent data points on this route. Click <a href="#">here</a> for more.</p>
+    <h2>Most Recent Data Points</h2>
     <ul>
       {% for datum in data_ten %}
         <li>
@@ -83,5 +84,6 @@
         </li>
       {% endfor %}
     </ul>
+  </div>
   </div>
 {% endblock %}
