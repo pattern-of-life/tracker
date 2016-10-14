@@ -200,3 +200,19 @@ li {
 #edit-device input {
   font-size: 1.5em;
 }
+
+#detail-route {
+    text-align: center;
+    background: #203454;
+    color: white;
+    text-align: center;
+    font-size: 2em;
+}
+
+#detail-route .metadata {
+    text-align: left;
+}
+
+#detail-route a {
+    color: #FB7600;
+}
