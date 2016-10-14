@@ -196,7 +196,6 @@ class DetailRouteView(DetailView):
     template_name = 'tracker_device/detail_route.html'
 
     def get_context_data(self, **kwargs):
-        # import pdb; pdb.set_trace()
         context = super(DetailRouteView, self).get_context_data(**kwargs)
         route = self.object
         context['route'] = route
