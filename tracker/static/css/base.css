@@ -1,3 +1,19 @@
+.site-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.site-footer-container {
+  margin: 0 auto;
+  color: white;
+  /*width: 100%;*/
+}
+
+#footer-text {
+  text-align: center;
+}
+
 .btn {
   background: linear-gradient(to top, #891A00, #FB7600);
   color: white;
