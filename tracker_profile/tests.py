@@ -63,6 +63,12 @@ class TrackerProfileViewTestCase(TestCase):
         url = reverse('detail_device', args=[self.device.pk])
         self.assertContains(self.response, url)
 
+    def test_profile_login_required(self):
+        """Test profile redirects to login."""
+        self.client.logout()
+        response = self.client.get(reverse('profile'))
+        self.assertEqual(response.status_code, 302)
+
 
 class TrackerProfileEditViewTestCase(TestCase):
     """Test profile editing."""
@@ -87,3 +93,9 @@ class TrackerProfileEditViewTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         actual_bio = User.objects.first().profile.bio
         self.assertEqual(actual_bio, expected_bio)
+
+    def test_edit_profile_login_required(self):
+        """Test profile redirects to login."""
+        self.client.logout()
+        response = self.client.get(reverse('edit_profile'))
+        self.assertEqual(response.status_code, 302)
