@@ -181,3 +181,14 @@ li {
 #device-detail a {
     color: #FB7600;
 }
+
+#edit-device { 
+    text-align: center;
+    background: #203454;
+    color: white;
+    text-align: center;
+}
+
+#edit-device input {
+  font-size: 1.5em;
+}
