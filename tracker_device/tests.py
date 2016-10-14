@@ -251,18 +251,13 @@ class CreateRouteViewTestCase(TestCase):
         total_routes = Route.objects.count()
         self.assertEqual(total_routes, 0)
 
-    def test_create_route_wrong_user(self):
-        """Test wrong authorized user cannot create route for other user."""
-        self.client.force_login(self.user2)
-        response = self.client.post(reverse('create_route'), self.post_data)
-        self.assertEqual(response.status_code, 403)
-
-    def test_create_route_wrong_user_no_route_in_db(self):
-        """Test wrong authorized user cannot create a route."""
-        self.client.force_login(self.user2)
-        self.client.post(reverse('create_route'), self.post_data)
-        total_routes = Route.objects.count()
-        self.assertEqual(total_routes, 0)
+    def test_create_route_without_devices(self):
+        """Test getting the create route view without devices."""
+        user = User(username='foo')
+        user.save()
+        self.client.force_login(user)
+        response = self.client.get(reverse('create_route'))
+        self.assertEqual(response.status_code, 200)
 
 
 class EditRouteViewTestCase(TestCase):

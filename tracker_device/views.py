@@ -121,7 +121,7 @@ def verify_route_ownership(user, pk):
         return HttpResponseRedirect(reverse('auth_login'))
 
 
-class CreateRouteView(CreateView):
+class CreateRouteView(LoginRequiredMixin, CreateView):
     """Create view for routes."""
     model = Route
     template_name = 'tracker_device/create_route.html'
@@ -137,12 +137,6 @@ class CreateRouteView(CreateView):
         form.instance.start = self.request.POST['start'] + " 00:00"
         form.instance.end = self.request.POST['end'] + " 00:00"
         return super(CreateRouteView, self).form_valid(form)
-
-    def dispatch(self, request, *args, **kwargs):
-        """Check if the route to create is owned by user."""
-        auth_errors = verify_route_ownership(request.user, kwargs.get('pk'))
-        super_dispatch = super(CreateRouteView, self).dispatch
-        return auth_errors or super_dispatch(request, *args, **kwargs)
 
 
 class EditRouteView(UpdateView):
