@@ -1,1 +1,1 @@
-Tracker registration confirmation
+TrackerPy Account Registration Email Confirmation
