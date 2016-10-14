@@ -190,6 +190,10 @@ li {
     color: #FB7600;
 }
 
+#device-detail ul {
+    font-size: 2em;
+}
+
 #edit-device { 
     text-align: center;
     background: #203454;
@@ -215,4 +219,8 @@ li {
 
 #detail-route a {
     color: #FB7600;
+}
+
+#detail-route #map {
+    border: solid #FB7600;
 }
