@@ -210,6 +210,11 @@ class DetailRouteView(DetailView):
             device=device)
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        auth_errors = verify_route_ownership(request.user, kwargs.get('pk'))
+        super_dispatch = super(DetailRouteView, self).dispatch
+        return auth_errors or super_dispatch(request, *args, **kwargs)
+
 
 class CreateDataPointForm(forms.ModelForm):
     """Form for adding a data point.
