@@ -1,11 +1,12 @@
 {% extends "tracker/base.html" %}
-
+{% load bootstrap %}
 {% block body %}
   <h2>Log In</h2>
-  <form action="" method="POST">{% csrf_token %}
-    <input type="text" class="form-control col-lg" name="username" placeholder="username"/>
-    <input type="password" class="form-control col-lg" name="password" placeholder="password"/>
-    <input class="btn btn-primary" type="submit" value="Submit"/>
-    {% if error %} <h1>{{ error }}</h1> {% endif %}
-  </form>
+  <div class="row">
+    <form action="" class="form-signin" method="POST">{% csrf_token %}
+      {{ form|bootstrap }}
+      <input class="btn btn-lg btn-block" type="submit" value="Submit"/>
+      {% if error %} <h1>{{ error }}</h1> {% endif %}
+    </form>
+  </div>
 {% endblock %}
