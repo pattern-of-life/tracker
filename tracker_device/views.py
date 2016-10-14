@@ -121,16 +121,38 @@ def verify_route_ownership(user, pk):
         return HttpResponseRedirect(reverse('auth_login'))
 
 
+class EditRouteForm(forms.ModelForm):
+    """Form with only user's devices on it."""
+    class Meta(object):
+        model = Route
+        fields = [
+            'name',
+            'description',
+            'start',
+            'end',
+            'device'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        """Limit the photo field's queryset to just photos from this user."""
+        user = kwargs.pop('user')
+        super(EditRouteForm, self).__init__(*args, **kwargs)
+        queryset = TrackerDevice.objects.filter(user=user)
+        self.fields['device'].queryset = queryset
+
+
 class CreateRouteView(LoginRequiredMixin, CreateView):
     """Create view for routes."""
     model = Route
     template_name = 'tracker_device/create_route.html'
     success_url = reverse_lazy('profile')
-    fields = [
-        "name",
-        "description",
-        "device",
-    ]
+    form_class = EditRouteForm
+
+    def get_form_kwargs(self):
+        """Attach user to kwargs for form to consume."""
+        kwargs = super(CreateRouteView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def form_valid(self, form):
         """Adding date view calendar picker."""

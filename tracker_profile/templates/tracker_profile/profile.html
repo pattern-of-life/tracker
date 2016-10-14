@@ -1,31 +1,70 @@
 {% extends "tracker/base.html" %}
 
 {% block body %}
-<div>
+<div id="profile" class="jumbotron">
   <h2>{{ object.user.username }}</h2>
-  {{ object.bio }}
-  {{ object.access_level }}
-  {{ object.street_address }}
-  {{ object.website }}
-  {{ object.social_media }}
+  <div><a class="btn" href="{% url 'edit_profile' %}">Edit</a></div>
 
-  <div>
-    {% if object.lat and object.lng %}
-      <h2>Location:</h2>
-      {{ object.lat }}
-      {{ object.lng }}
-    {% endif %}
+  <div class="leftaligned">
+    <div class="row">
+      Biography:
+      {% if object.bio %}
+        {{ object.bio }}
+      {% else %}
+        <a href="{% url 'edit_profile' %}">set biography</a>
+      {% endif %}
+    </div>
+    <div class="row">
+      Access Level: 
+      {% if object.access_level %}
+        {{ object.access_level }}
+      {% else %}
+        <a href="{% url 'edit_profile' %}">set access level</a>
+      {% endif %}
+    </div>
+    <div class="row">
+      Address:
+      {% if object.street_address %}
+        {{ object.street_address }}
+      {% else %}
+        <a href="{% url 'edit_profile' %}">set address</a>
+      {% endif %}
+    </div>
+    <div class="row">
+      Website:
+      {% if object.website %}
+        {{ object.website }}
+      {% else %}
+        <a href="{% url 'edit_profile' %}">set website</a>
+      {% endif %}
+    </div>
+    <div class="row">
+      Social Media:
+      {% if object.social_media %}
+        {{ object.social_media }}
+      {% else %}
+        <a href="{% url 'edit_profile' %}">set social media</a>
+      {% endif %}
+    </div>
+    <div class="row">
+      Coordinates: 
+      {% if object.lat and object.lng %}
+        latitude {{ object.lat }}, longitude {{ object.lng }}
+      {% else %}
+        <a href="{% url 'edit_profile' %}">set coordinates</a>
+      {% endif %}
+    </div>
   </div>
-
+  <h2>Devices</h2>
   <ul>
     {% for device in object.user.devices.all %}
-      <li><a href="{% url 'detail_device' device.pk %}">{{ device.title }} {{ device.pk }}</a></li>
-    {% endfor %}
-  </ul>
-
-  <ul>
-    {% for route in object.user.routes.all %}
-      <li><a href="{% url 'detail_route route.pk' %}">{{ route.title }} {{ route.pk }}</a></li>
+      <li><a href="{% url 'detail_device' device.pk %}">
+          {% if device.title %}
+            {{ device.title }}:
+          {% else %}
+            Device:
+          {% endif %} {{ device.data.count }} data point(s)
+      </a></li>
     {% endfor %}
   </ul>
 

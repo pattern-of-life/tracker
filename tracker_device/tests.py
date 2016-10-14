@@ -259,6 +259,14 @@ class CreateRouteViewTestCase(TestCase):
         response = self.client.get(reverse('create_route'))
         self.assertEqual(response.status_code, 200)
 
+    def test_create_route_only_shows_user_devices(self):
+        """Test create route view only shows user's devices."""
+        title = "dont show up"
+        device = TrackerDevice(user=self.user2, title=title, mode='quiet')
+        device.save()
+        response = self.client.get(reverse('create_route'))
+        self.assertNotContains(response, title)
+
 
 class EditRouteViewTestCase(TestCase):
     """Test editing a route."""
@@ -322,6 +330,14 @@ class EditRouteViewTestCase(TestCase):
         self.client.post(self.url, data)
         route = Route.objects.first()
         self.assertNotEqual(route.name, bad_name)
+
+    def test_edit_route_only_shows_user_devices(self):
+        """Test edit route view only shows user's devices."""
+        title = "dont show up"
+        device = TrackerDevice(user=self.other_user, title=title, mode='quiet')
+        device.save()
+        response = self.client.get(self.url)
+        self.assertNotContains(response, title)
 
 
 class DeleteRouteViewTestCase(TestCase):
