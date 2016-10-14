@@ -129,10 +129,14 @@ class CreateRouteView(CreateView):
     fields = [
         "name",
         "description",
-        "start",
-        "end",
         "device",
     ]
+
+    def form_valid(self, form):
+        """Adding date view calendar picker."""
+        form.instance.start = self.request.POST['start'] + " 00:00"
+        form.instance.end = self.request.POST['end'] + " 00:00"
+        return super(CreateRouteView, self).form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
         """Check if the route to create is owned by user."""

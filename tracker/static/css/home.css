@@ -9,6 +9,7 @@ body {
 
 #base nav {
     background: none;
+    margin-top: 1em;
     border: none;
 }
 
@@ -20,11 +21,6 @@ body {
     color: white;
 }
 
-#base a {
-    color: none;
-    background: none;
-}
-
 #base .btn {
     background: linear-gradient(to top, #891A00, #FB7600);
     color: white;
@@ -32,7 +28,7 @@ body {
 }
 
 #home h2 {
-    margin-top: 2.88em;
+    margin-top: 2em;
     font-weight: bolder;
     font-size: 5em;
 }

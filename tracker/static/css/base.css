@@ -1,3 +1,17 @@
+.btn {
+  background: linear-gradient(to top, #891A00, #FB7600);
+  color: white;
+}
+
+.btn:hover {
+  color: #203454;
+  font-weight: bold;
+}
+
+label {
+  font-size: 1.5em;
+}
+
 #base {
     font-weight: bold;
 }
@@ -5,6 +19,7 @@
 #base .navbar-brand {
     background: linear-gradient(to top, #891A00, #FB7600);
     border-radius: .3em;
+    color: white;
 }
 
 #base nav a {
@@ -19,9 +34,41 @@
     text-align: center;
 }
 
-.mug {
-    height: 8em;
-    width: 8em;
+#create-device {
+  background: #203454;
+  color: white;
+}
+
+
+#create-device input {
+  font-size: 1.5em;
+}
+
+#create-device select {
+  font-size: 1.5em
+}
+
+#create-route {
+  background: #203454;
+  color: white;
+}
+
+#create-route input {
+  font-size: 1.5em;
+}
+
+#create-route select {
+  font-size: 1.5em;
+}
+
+#create-data {
+  background-color: #601D01;
+  color: white;
+}
+
+#about .mug {
+  height: 8em;
+  width: 8em;
 }
 
 #about {
@@ -42,6 +89,7 @@
 
 #about h2 {
     margin-bottom: 1.5em;
+    text-align: center;
 }
 
 #about .blurb {
@@ -52,8 +100,13 @@
 #about .make-skinny {
     width: 65%;
     margin: 0 auto 2.25em auto;
+    text-align: center;
 }
 
 #about .about_team_spacer {
     margin-top: 1em;
+}
+
+#about p {
+  color: white;
 }
