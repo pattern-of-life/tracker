@@ -1,5 +1,6 @@
 import os
 from django import forms
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.urls import reverse, reverse_lazy
@@ -9,10 +10,11 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
-    DetailView,)
+    DetailView,
+)
 
 
-class CreateDeviceView(CreateView):
+class CreateDeviceView(LoginRequiredMixin, CreateView):
     """View for creating a new device."""
     model = TrackerDevice
     fields = [
@@ -92,6 +94,19 @@ class DetailDeviceView(DetailView):
         context['data'] = device.data.order_by('-time')[:10]
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        """Check if the device to view is owned by user."""
+        pk = kwargs.get('pk')
+        try:
+            device = request.user.devices.filter(pk=pk).first()
+        except AttributeError:
+            return HttpResponseRedirect(reverse('auth_login'))
+        if device:
+            super_dispatch = super(DetailDeviceView, self).dispatch
+            return super_dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponseForbidden()
+
 
 def verify_route_ownership(user, pk):
     """Verify that the pk matches a route owned by the user.
@@ -122,6 +137,12 @@ class CreateRouteView(CreateView):
         form.instance.start = self.request.POST['start'] + " 00:00"
         form.instance.end = self.request.POST['end'] + " 00:00"
         return super(CreateRouteView, self).form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        """Check if the route to create is owned by user."""
+        auth_errors = verify_route_ownership(request.user, kwargs.get('pk'))
+        super_dispatch = super(CreateRouteView, self).dispatch
+        return auth_errors or super_dispatch(request, *args, **kwargs)
 
 
 class EditRouteView(UpdateView):
@@ -202,7 +223,7 @@ class CreateDataPointView(CreateView):
     model = Route
     form_class = CreateDataPointForm
     template_name = 'tracker_device/create_data_point.html'
-    success_url = reverse_lazy('profile')
+    success_url = reverse_lazy('homepage')
 
     def form_valid(self, form):
         """Attach the right device to the form.
