@@ -98,6 +98,22 @@ class CreateDeviceViewTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(TrackerDevice.objects.count(), 1)
 
+    def test_unauthenticated_user_get_view(self):
+        """Check unauthenticated user is redirected."""
+        self.client.logout()
+        response = self.client.get(reverse('create_device'))
+        url = reverse('auth_login') + '?next=' + reverse('create_device')
+        self.assertRedirects(response, url)
+
+    def test_unauthenticated_user_post_view(self):
+        """Check unauthenticated user is redirected on post."""
+        self.client.logout()
+        data = dict(mode='quiet')
+        response = self.client.post(reverse('create_device'), data)
+        url = reverse('auth_login') + '?next=' + reverse('create_device')
+        self.assertRedirects(response, url)
+        self.assertEqual(TrackerDevice.objects.count(), 0)
+
 
 class EditDeviceViewTestCase(TestCase):
     """Test case for editing existing devices."""
@@ -206,6 +222,11 @@ class CreateRouteViewTestCase(TestCase):
         self.client.force_login(user)
         self.device = TrackerDevice(user=user)
         self.device.save()
+        self.post_data = {
+            'start': '2016-10-10',
+            'end': '2016-10-10',
+            'device': self.device.pk
+        }
 
     def test_create_route_status_code(self):
         """Test status code is 200 for new route creation."""
@@ -214,54 +235,37 @@ class CreateRouteViewTestCase(TestCase):
 
     def test_create_route_post_status_code(self):
         """Test status code after post is 302."""
-        data = {
-            "start": "10/21/2016",
-            "device": self.device.pk
-            }
-        response = self.client.post(reverse('create_route'), data)
+        response = self.client.post(reverse('create_route'), self.post_data)
         self.assertEqual(response.status_code, 302)
 
     def test_create_route_unauth_user(self):
         """Test unauthorized user cannot create routes."""
         self.client.logout()
-        data = {
-            "start": "10/21/2016",
-            "device": self.device.pk
-        }
-        response = self.client.post(reverse('create_route'), data)
+        response = self.client.post(reverse('create_route'), self.post_data)
         self.assertEqual(response.status_code, 302)
 
     def test_create_route_unauth_user_no_route_in_db(self):
         """Test unauthorized user cannot create a route."""
         self.client.logout()
-        data = {
-                "start": "10/21/2016",
-                "device": self.device.pk
-            }
-        self.client.post(reverse('create_route'), data)
+        self.client.post(reverse('create_route'), self.post_data)
         total_routes = Route.objects.count()
         self.assertEqual(total_routes, 0)
 
-    def test_create_route_wrong_user(self):
-        """Test wrong authorized user cannot create route for other user."""
-        self.client.force_login(self.user2)
-        data = {
-            "start": "10/21/2016",
-            "device": self.device.pk
-        }
-        response = self.client.post(reverse('create_route'), data)
-        self.assertEqual(response.status_code, 403)
+    def test_create_route_without_devices(self):
+        """Test getting the create route view without devices."""
+        user = User(username='foo')
+        user.save()
+        self.client.force_login(user)
+        response = self.client.get(reverse('create_route'))
+        self.assertEqual(response.status_code, 200)
 
-    def test_create_route_wrong_user_no_route_in_db(self):
-        """Test wrong authorized user cannot create a route."""
-        self.client.force_login(self.user2)
-        data = {
-                "start": "10/21/2016",
-                "device": self.device.pk
-            }
-        self.client.post(reverse('create_route'), data)
-        total_routes = Route.objects.count()
-        self.assertEqual(total_routes, 0)
+    def test_create_route_only_shows_user_devices(self):
+        """Test create route view only shows user's devices."""
+        title = "dont show up"
+        device = TrackerDevice(user=self.user2, title=title, mode='quiet')
+        device.save()
+        response = self.client.get(reverse('create_route'))
+        self.assertNotContains(response, title)
 
 
 class EditRouteViewTestCase(TestCase):
@@ -326,6 +330,14 @@ class EditRouteViewTestCase(TestCase):
         self.client.post(self.url, data)
         route = Route.objects.first()
         self.assertNotEqual(route.name, bad_name)
+
+    def test_edit_route_only_shows_user_devices(self):
+        """Test edit route view only shows user's devices."""
+        title = "dont show up"
+        device = TrackerDevice(user=self.other_user, title=title, mode='quiet')
+        device.save()
+        response = self.client.get(self.url)
+        self.assertNotContains(response, title)
 
 
 class DeleteRouteViewTestCase(TestCase):
@@ -434,3 +446,198 @@ class CreateDataPointViewTestCase(TestCase):
         response = self.client.post(reverse('create_data_point'), data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(DataPoint.objects.count(), 0)
+
+    def test_create_data_point_unauthenticated(self):
+        """Test data point redirects to home page."""
+        data = dict(
+            time='10/10/10',
+            lat=323.0,
+            lng=232.0,
+            elevation=15.3,
+            uuid=self.device.id_uuid
+        )
+        url = reverse('create_data_point')
+        response = self.client.post(url, data, follow=True)
+        self.assertRedirects(response, reverse('homepage'))
+
+
+class TestDetailDeviceView(TestCase):
+    """Tests for detail device view."""
+
+    TEST_DATA = map(timezone.make_aware, [
+        timezone.datetime(1974, 5, 17, 0, 0),
+        timezone.datetime(1369, 4, 27, 0, 0),
+        timezone.datetime(2512, 12, 8, 0, 0),
+        timezone.datetime(2170, 1, 18, 0, 0),
+        timezone.datetime(1821, 5, 28, 0, 0),
+        timezone.datetime(2519, 9, 15, 0, 0),
+        timezone.datetime(1721, 7, 19, 0, 0),
+        timezone.datetime(2328, 6, 18, 0, 0),
+        timezone.datetime(2937, 12, 7, 0, 0),
+        timezone.datetime(2555, 11, 10, 0, 0),
+        timezone.datetime(2967, 8, 15, 0, 0),
+        timezone.datetime(2278, 10, 20, 0, 0),
+        timezone.datetime(1158, 5, 23, 0, 0),
+        timezone.datetime(2286, 2, 25, 0, 0),
+        timezone.datetime(2529, 5, 5, 0, 0),
+        timezone.datetime(2307, 2, 3, 0, 0),
+        timezone.datetime(1118, 5, 5, 0, 0),
+        timezone.datetime(2891, 7, 9, 0, 0),
+        timezone.datetime(2579, 6, 8, 0, 0),
+        timezone.datetime(2060, 10, 9, 0, 0),
+        timezone.datetime(2665, 1, 24, 0, 0),
+        timezone.datetime(2096, 8, 15, 0, 0),
+        timezone.datetime(2846, 4, 12, 0, 0),
+        timezone.datetime(2841, 6, 11, 0, 0),
+        timezone.datetime(1429, 5, 27, 0, 0),
+        timezone.datetime(1873, 12, 21, 0, 0),
+        timezone.datetime(1476, 2, 12, 0, 0),
+        timezone.datetime(2061, 1, 1, 0, 0),
+        timezone.datetime(2698, 8, 15, 0, 0),
+        timezone.datetime(1382, 9, 26, 0, 0)
+    ])
+
+    def setUp(self):
+        """Add a device with some data points to test."""
+        self.user = User(username='test user')
+        self.user.save()
+        self.device = TrackerDevice(user=self.user, title='test device')
+        self.device.save()
+        self.client.force_login(self.user)
+        for i, date in enumerate(self.TEST_DATA):
+            DataPoint(
+                time=date,
+                lat=i,
+                lng=i+30,
+                elevation=i+60,
+                device=self.device
+            ).save()
+        url = reverse('detail_device', args=[self.device.pk])
+        self.response = self.client.get(url)
+        # data should be listed on page by most recent to least
+        self.data = self.device.data.order_by('-time')
+
+    def test_title_on_page(self):
+        """Test title of device on page."""
+        self.assertContains(self.response, self.device.title)
+
+    def test_page_has_data_point_lats(self):
+        """Test response has latitudes."""
+        for i, datum in enumerate(self.data):
+            if i < 10:
+                self.assertContains(self.response, datum.lat)
+            else:
+                self.assertNotContains(self.response, datum.lat)
+
+    def test_page_has_data_point_lngs(self):
+        """Test response has longitudes."""
+        for i, datum in enumerate(self.data):
+            if i < 10:
+                self.assertContains(self.response, datum.lng)
+            else:
+                self.assertNotContains(self.response, datum.lng)
+
+    def test_page_has_data_point_elevation(self):
+        """Test response has elevations."""
+        for i, datum in enumerate(self.data):
+            if i < 10:
+                self.assertContains(self.response, datum.elevation)
+            else:
+                self.assertNotContains(self.response, datum.lng)
+
+    def test_get_page_unauthenticated(self):
+        """Test redirects when unauthenticated"""
+        self.client.logout()
+        url = reverse('detail_device', args=[self.device.pk])
+        response = self.client.get(url)
+        self.assertRedirects(response, reverse('auth_login'))
+
+    def test_get_page_wrong_user(self):
+        """Test redirects when unauthenticated"""
+        other_user = User(username='wrong')
+        other_user.save()
+        self.client.force_login(other_user)
+        url = reverse('detail_device', args=[self.device.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+
+
+class TestDetailRouteView(TestCase):
+    """Tests for detail route view."""
+
+    TEST_DATA = map(timezone.make_aware, [
+        timezone.datetime(1974, 5, 17, 0, 0),
+        timezone.datetime(1369, 4, 27, 0, 0),
+        timezone.datetime(2512, 12, 8, 0, 0),
+        timezone.datetime(2170, 1, 18, 0, 0),
+        timezone.datetime(1821, 5, 28, 0, 0),
+        timezone.datetime(2519, 9, 15, 0, 0),
+        timezone.datetime(1721, 7, 19, 0, 0),
+        timezone.datetime(2328, 6, 18, 0, 0),
+        timezone.datetime(2937, 12, 7, 0, 0),
+        timezone.datetime(2555, 11, 10, 0, 0),
+        timezone.datetime(2967, 8, 15, 0, 0),
+        timezone.datetime(2278, 10, 20, 0, 0),
+        timezone.datetime(1158, 5, 23, 0, 0),
+        timezone.datetime(2286, 2, 25, 0, 0),
+        timezone.datetime(2529, 5, 5, 0, 0),
+        timezone.datetime(2307, 2, 3, 0, 0),
+        timezone.datetime(1118, 5, 5, 0, 0),
+        timezone.datetime(2891, 7, 9, 0, 0),
+        timezone.datetime(2579, 6, 8, 0, 0),
+        timezone.datetime(2060, 10, 9, 0, 0),
+        timezone.datetime(2665, 1, 24, 0, 0),
+        timezone.datetime(2096, 8, 15, 0, 0),
+        timezone.datetime(2846, 4, 12, 0, 0),
+        timezone.datetime(2841, 6, 11, 0, 0),
+        timezone.datetime(1429, 5, 27, 0, 0),
+        timezone.datetime(1873, 12, 21, 0, 0),
+        timezone.datetime(1476, 2, 12, 0, 0),
+        timezone.datetime(2061, 1, 1, 0, 0),
+        timezone.datetime(2698, 8, 15, 0, 0),
+        timezone.datetime(1382, 9, 26, 0, 0)
+    ])
+
+    def setUp(self):
+        """Add a route with some data points to test."""
+        self.user = User(username='test user')
+        self.user.save()
+        self.client.force_login(self.user)
+        self.device = TrackerDevice(user=self.user, title='test device')
+        self.device.save()
+        for i, date in enumerate(self.TEST_DATA):
+            DataPoint(
+                time=date,
+                lat=i,
+                lng=i+30,
+                elevation=i+60,
+                device=self.device
+            ).save()
+        start = timezone.make_aware(timezone.datetime(1001, 1, 1))
+        end = timezone.make_aware(timezone.datetime(2200, 1, 1))
+        self.route = Route(device=self.device, start=start, end=end)
+        self.route.save()
+        self.url = reverse('detail_route', args=[self.route.pk])
+        self.response = self.client.get(self.url)
+
+    def test_route_name_on_route_page(self):
+        """Test name of route on route page."""
+        self.assertContains(self.response, self.route.name)
+
+    def test_route_data_ten_has_ten(self):
+        """Test that context['data_ten'] has only 10 things in it."""
+        self.assertEqual(len(self.response.context['data_ten']), 10)
+
+    def test_unauthenticated_user_get_view(self):
+        """Test unauthenticated users getting route redirects to login."""
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_wrong_user_get_view(self):
+        """Test users cannot view each other's views."""
+        user = User(username='someoneelse')
+        user.save()
+        self.client.force_login(user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)

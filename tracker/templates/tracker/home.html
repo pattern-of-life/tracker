@@ -5,22 +5,8 @@
 {% endblock %}
 {% block body %}
 <div id="home">
-  <div>
-    <h2>Welcome to TrackerPy</h2>
-  </div>
-  <div>
-    {% if request.user.is_authenticated %}
-      <a href="{% url 'auth_logout' %}">
-        <input type="button" value="Log Out" class="btn btn-primary"/>
-      </a>
-    {% else %}
-      <a href="{% url 'auth_login' %}">
-        <input type="button" value="Log In" class="btn btn-primary"/>
-      </a>
-      <a href="{% url 'registration_register' %}">
-        <input type="button" value="Sign Up" class="btn btn-primary">
-      </a>
-    {% endif %}
-  </div>
+  <header class="welcome-header">
+    <h2 class="welcome">Welcome to TrackerPy</h2>
+  </header>
 </div>
 {% endblock %}

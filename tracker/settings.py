@@ -19,13 +19,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_)ls0i9+%l!(9ih$o^iev67%x&fwsb7s!!1rhj)#$5y-43xk4z'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.us-west-2.compute.amazonaws.com', '.trackerpy.com']
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend"
+)
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+SECRET_KEY = os.environ.get("SECRET_KEY")
+DEBUG = os.environ.get('DEBUG', 'False') != 'False'
 
 
 # Application definition
@@ -37,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrapform',
     'tracker_profile',
     'tracker_device'
 ]
@@ -136,20 +144,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,
-                 "static"),
+    os.path.join(BASE_DIR, "tracker", "static")
 ]
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-
-# Email
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-
 # Logout
 
 LOGOUT_REDIRECT_URL = '/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/profile/'

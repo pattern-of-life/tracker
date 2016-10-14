@@ -1,0 +1,89 @@
+{% extends "tracker/base.html" %}
+
+{% block head %}
+  <style>
+  #map {
+      height: 25em;
+      width: 100%;
+      max-width: 80em;
+  }
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div id="detail-route" class="jumbotron">
+  <div class="metadata">
+    <h3>
+      {% if route.title %}
+      {% endif %}
+    </h3>
+    <ul>
+      <li>Route description: {{ route.description }}</li>
+      <li>Route start: {{ route.start }}</li>
+      <li>Route end: {{ route.end }}</li>
+      <li>
+        Device:
+        <a href="{% url 'detail_device' device.pk %}">
+          {% if device.title %}{{ device.title }}{% else %}Link{% endif %}
+        </a>
+      </li>
+    </ul>
+  </div>
+  {% if data.count %}
+  <div>
+    <h3>Map of Data Points:</h3>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        var coords = [
+          {% for datum in data %}
+          {
+            lat: {{ datum.lat }},
+            lng: {{ datum.lng }},
+            title: "{{ datum.time }}"
+          },
+          {% endfor %}
+        ]
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: coords[0]
+        });
+
+        coords.forEach(function(coord) {
+          new google.maps.Marker({
+            position: coord,
+            map: map,
+            title: coord.title,
+          });
+        });
+
+        new google.maps.Polyline({
+          path: coords,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2,
+          map: map
+        })
+      }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ googleapikey }}&callback=initMap">
+    </script>
+  </div>
+  {% endif %}
+  <div>
+    <h2>Most Recent Data Points</h2>
+    <ul>
+      {% for datum in data_ten %}
+        <li>
+          {{ datum.time }},
+          latitude {{ datum.lat }},
+          longitude {{ datum.lng }},
+          {{ datum.elevation }} meters
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  </div>
+{% endblock %}
