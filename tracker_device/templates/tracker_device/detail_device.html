@@ -47,16 +47,16 @@
       UUID: {{ device.id_uuid }}
     </div>
   </div>
+
   {% if routes %}
-  <div>
-    <h3>Routes</h3>
-    <p>These routes belong to your device.</p>
-    <ul>
-      {% for route in routes %}
-      <li><a href="{% url 'detail_route' route.pk %}">{{ route.name }}: {{ route.description }}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
+    <div>
+      <h3>Routes</h3>
+      <div class="routes">
+        {% for route in routes %}
+          <a href="{% url 'detail_route' route.pk %}">{{ route.name }}</a>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
   {% if device.data.count %}
   <div>

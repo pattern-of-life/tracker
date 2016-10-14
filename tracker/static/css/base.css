@@ -158,6 +158,10 @@ li {
     font-size: 3em;
 }
 
+#device-detail h3 {
+    font-size: 2.5em;
+}
+
 #device-detail a.btn {
     font-size: 1.2em;
     color: white;
@@ -171,6 +175,10 @@ li {
 
 #device-detail .metadata {
     text-align: left;
+    font-size: 2em;
+}
+
+#device-detail .routes {
     font-size: 2em;
 }
 
