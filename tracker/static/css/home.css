@@ -1,0 +1,58 @@
+html {
+    background: url("../images/splash.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: 25%;
+}
+
+body {
+    background-color: rgba(0,0,0,0);
+}
+
+.container h2 {
+    color: white;
+}
+
+#base nav {
+    background: none;
+    margin-top: 1em;
+    border: none;
+}
+
+#base {
+    color: white;
+}
+
+#base a {
+    color: white;
+}
+
+#base .btn {
+    background: linear-gradient(to top, #891A00, #FB7600);
+    color: white;
+    border: none;
+}
+
+#home h2 {
+    margin-top: 2em;
+    font-weight: bolder;
+    font-size: 5em;
+}
+
+#home .welcome {
+    display: block;
+}
+#home .welcome-header {
+    display: block;
+    margin: 2em auto;
+    text-align: center;
+}
+
+#base nav .navbar-right a {
+    border-bottom: thick solid transparent;
+}
+
+#base nav .navbar-right a:hover {
+    border-bottom: thick solid #3F68C2;
+}

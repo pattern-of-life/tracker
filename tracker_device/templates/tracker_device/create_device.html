@@ -1,0 +1,13 @@
+{% extends "tracker/base.html" %}
+{% load bootstrap %}
+
+{% block body %}
+<main id="create-device" class="container-fluid portal-main jumbotron">
+  <section class="row">
+    <form action=" " method="post" enctype="multipart/form-data">{% csrf_token %}
+      {{ form|bootstrap }}
+      <button class="btn btn-lg btn-block" type="submit">Create New Device</button>
+    </form>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,226 @@
+.btn {
+  background: linear-gradient(to top, #891A00, #FB7600);
+  color: white;
+  font-weight: bold;
+}
+
+.btn:hover {
+  color: #203454;
+  font-weight: bold;
+}
+
+label {
+  font-size: 1.5em;
+}
+
+li {
+  list-style-type: none;
+}
+
+#base {
+    font-weight: bold;
+}
+
+#base .navbar-brand {
+    background: linear-gradient(to top, #891A00, #FB7600);
+    border-radius: .3em;
+    color: white;
+}
+
+#base nav a {
+    font-size: 1.5em;
+}
+
+#base nav {
+    margin-top: 1em;
+}
+
+#base {
+    text-align: center;
+}
+
+#edit_profile {
+    background: #203454;
+    color: white;
+    text-align: left;
+}
+
+#edit_profile input {
+  font-size: 1.5em;
+}
+
+#profile {
+    background: #203454;
+    color: white;
+    text-align: center;
+    font-size: 2em;
+}
+
+#profile h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#profile a.btn {
+    font-size: 0.7em;
+    color: white;
+    font-weight: bold;
+}
+
+#profile a.btn:hover {
+  color: #203454;
+}
+
+#profile .leftaligned {
+    text-align: left;
+}
+
+#profile a {
+    color: #FB7600;
+}
+
+#create-device {
+  background: #203454;
+  color: white;
+}
+
+#create-device input {
+  font-size: 1.5em;
+}
+
+#create-route {
+  background: #203454;
+  color: white;
+}
+
+#create-route input {
+  font-size: 1.5em;
+}
+
+#create-data {
+  background-color: #601D01;
+  color: white;
+}
+
+#about .mug {
+  height: 8em;
+  width: 8em;
+}
+
+#about {
+    background-color: #203454;
+}
+
+#about .row {
+    padding-bottom: 1em;
+}
+
+#about .projectlink {
+    font-size: 1.5em;
+}
+
+#about .project-spacer {
+    margin-top: 2.5em;
+}
+
+#about h2 {
+    margin-bottom: 1.5em;
+    text-align: center;
+}
+
+#about .blurb {
+    text-align: left;
+    font-size: 1.3em;
+}
+
+#about .make-skinny {
+    width: 65%;
+    margin: 0 auto 2.25em auto;
+    text-align: center;
+}
+
+#about .about_team_spacer {
+    margin-top: 1em;
+}
+
+#about p {
+  color: white;
+}
+
+#device-detail {
+    text-align: center;
+    background: #203454;
+    color: white;
+    text-align: center;
+}
+
+#device-detail h2 {
+    font-size: 3em;
+}
+
+#device-detail h3 {
+    font-size: 2.5em;
+}
+
+#device-detail a.btn {
+    font-size: 1.2em;
+    color: white;
+    font-weight: bold;
+}
+
+#device-detail a.btn:hover {
+  color: #203454;
+  font-weight: bold;
+}
+
+#device-detail .metadata {
+    text-align: left;
+    font-size: 2em;
+}
+
+#device-detail .routes {
+    font-size: 2em;
+}
+
+#device-detail #map {
+    border: solid #FB7600;
+}
+
+#device-detail a {
+    color: #FB7600;
+}
+
+#device-detail ul {
+    font-size: 2em;
+}
+
+#edit-device {
+    text-align: center;
+    background: #203454;
+    color: white;
+    text-align: center;
+}
+
+#edit-device input {
+  font-size: 1.5em;
+}
+
+#detail-route {
+    text-align: center;
+    background: #203454;
+    color: white;
+    text-align: center;
+    font-size: 2em;
+}
+
+#detail-route .metadata {
+    text-align: left;
+}
+
+#detail-route a {
+    color: #FB7600;
+}
+
+#detail-route #map {
+    border: solid #FB7600;
+}

@@ -1,0 +1,14 @@
+{% extends "tracker/base.html" %}
+
+{% load bootstrap %}
+
+{% block body %}
+<div id="edit-device" class="jumbotron">
+  <form action=" " method="post" enctype="multipart/form-data">{% csrf_token %}
+    {{ form|bootstrap }}
+    <button class="btn btn-lg btn-block" type="submit">
+      Update Device Information
+    </button>
+  </form>
+</div>
+{% endblock %}

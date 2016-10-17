@@ -1,0 +1,121 @@
+{% extends "tracker/base.html" %}
+
+{% block head %}
+  {% load static %}
+  <link type="text/css" rel="stylesheet" href="{% static "css/home.css" %}" charset="utf-8">
+{% endblock %}
+{% block body %}
+  <div id="about" class="container jumbotron">
+    <div>
+      <h2>About The Site</h2>
+      <p class="make-skinny">The goal of this project is to demonstrate proof-of-concept for a small form factor python based hardware tracking device using GPS and GSM connectivity.</p>
+    </div>
+
+    <div>
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-1 img-shift">
+          <img class="mug" src="{% static 'images/cropped_splash.jpg' %}">
+        </div>
+        <div class="col-sm-8 project-spacer">
+          <p class="blurb">
+            <a class="projectlink" href="https://github.com/pattern-of-life/tracker">Website Source</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-1 img-shift">
+          <img class="mug" src="{% static 'images/device.jpg' %}">
+        </div>
+        <div class="col-sm-8 project-spacer">
+          <p class="blurb">
+            <a class="projectlink" href="https://github.com/pattern-of-life/tracker-hardware">Device Firmware</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-1 img-shift">
+          <img class="mug" src="{% static 'images/ansible.png' %}">
+        </div>
+        <div class="col-sm-8 project-spacer">
+          <p class="blurb">
+            <a class="projectlink" href="https://github.com/pattern-of-life/trackerpy-ansible">Ansible Playbook</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="about_team_spacer">About The Team</h2>
+
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-1 img-shift">
+          <a href="https://www.linkedin.com/in/david-banks">
+            <img class="mug" src="{% static 'images/david photo.jpg' %}">
+          </a>
+          <div>
+            <a href="https://github.com/crashtack">
+              <strong>David Banks</strong>
+            </a>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <p class="blurb">
+            Python Developer with 10 years of hardware expertise applying circuit and firmware design techniques to engineer and test electronic devices and computer hardware.
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-1 img-shift">
+          <a href="https://www.linkedin.com/in/derek-hewitt">
+            <img class="mug" src="{% static 'images/derek photo.jpg' %}">
+          </a>
+          <div>
+            <a href="https://github.com/derekmhewitt">
+              <strong>Derek Hewitt</strong></div>
+            </a>
+          </div>
+          <div class="col-sm-8">
+            <p class="blurb">
+              Derek is a developer, a veteran and a life-long learner.  He loves dogs, coffee and good beer.  In his time off he enjoys gaming and..  well pretty much just gaming.  Derek is a long time EVE Online player and 3k MMR scrub in Dota2.  But he has lots of hats so it's fine.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-1 img-shift">
+          <img class="mug" src="{% static 'images/justin photo.jpg' %}">
+          <div>
+            <a href="https://github.com/welliam">
+              <strong>Justin Lange</strong>
+            </a>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <p class="blurb">
+            A Python developer proficient in a variety of programming languages and software development tools. My previous experience in music recording and theory have given me the initiative to tackle difficult topics in web development.</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-2 col-sm-offset-1 img-shift">
+          <a href="https://www.linkedin.com/in/vbenavente">
+            <img class="mug" src="{% static 'images/victor photo.jpg' %}">
+          </a>
+          <div>
+            <a href="https://github.com/vbenavente">
+              <strong>Victor Benavente</strong>
+            </a>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <p class="blurb">
+            Python Developer with experience managing teams ranging in size from 4 to 150. Experienced with MEAN stack and Python. Emphasis on Object Oriented Programming and Test Driven Development.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TrackerPy</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    {% load static %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/base.css' %}" charset="utf-8">
+    {% block head %}
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="base">
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'homepage' %}">TrackerPy</a>
+          </div>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="{% url 'aboutpage' %}">About</a></li>
+              {% if request.user.is_authenticated %}
+              <li><a href="{% url 'auth_logout' %}">Log Out</a></li>
+              <li><a href="{% url 'profile' %}">Profile</a></li>
+              <li><a href="{% url 'create_device' %}">New Device</a></li>
+              <li><a href="{% url 'create_route' %}">New Route</a></li>
+              {% else %}
+              <li><a href="{% url 'auth_login' %}">Log In</a></li>
+              <li><a href="{% url 'registration_register' %}">Sign Up</a></li>
+              {% endif %}
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div id="body-container" class="container">
+      {% block body %}
+      {% endblock %}
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  {% block js %}
+  {% endblock %}
+  </body>
+</html>

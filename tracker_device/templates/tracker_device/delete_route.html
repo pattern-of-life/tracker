@@ -1,0 +1,8 @@
+{% extends "tracker/base.html" %}
+
+{% block body %}
+  <form action="" method="POST">{% csrf_token %}
+    <p>Are you sure you want to delete this route "{{ route.title }}"?</p>
+    <input type="submit" value="Confirm"/>
+  </form>
+{% endblock %}
